@@ -1,4 +1,5 @@
 from config import *
+import theano
 import scipy.io
 
 if __name__ == "__main__":	
