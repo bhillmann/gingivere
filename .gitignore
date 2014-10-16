@@ -74,6 +74,7 @@ com_crashlytics_export_strings.xml
 ### IPythonNotebook ###
 # Temporary data
 .ipynb_checkpoints/
+ipython_notebooks/
 
 
 ### Python ###
