@@ -132,3 +132,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Ignore JSON files
+*.json
