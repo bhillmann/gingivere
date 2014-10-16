@@ -1,4 +1,3 @@
-from config import *
 import scipy.io
 import json
 # from sklearn.decomposition import PCA
