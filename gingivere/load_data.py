@@ -1,6 +1,9 @@
 import scipy.io
 import json
 from sklearn.decomposition import PCA
+import numpy as np
+import matplotlib.pyplot as plt
+
 #
 # from sklearn.feature_selection import SelectKBest
 # from sklearn.feature_selection import chi2
@@ -10,7 +13,7 @@ from sklearn.decomposition import PCA
 
 def load_mat(path, number=1, state='preictal'):
     mat = scipy.io.loadmat(path + "Dog_22/Dog_2_%s_segment_%04d.mat" % (state, number))
-    xx = mat['preictal_segment_1'][0, 0]
+    xx = mat['%s_segment_%d' % (state, number)][0, 0]
     data = xx[0]
     data_length_sec = xx[1]
     sampling_frequency = xx[2]
@@ -27,14 +30,27 @@ def pca_reduce(data):
     return pca.fit_transform(data)
 
 
+def plot(data):
+    plt.scatter([v[0] for v in data], [v[1] for v in data], c=[v[2] for v in data])
+    plt.show()
+
+
 def main():
     with open('config.json', 'r') as f:
         DATA_PATH = json.load(f)
         f.close()
-    data = load_mat(DATA_PATH)
-    xx = pca_reduce(data)
-    return xx
+    p = load_mat(DATA_PATH)
+    i = load_mat(DATA_PATH, state='interictal')
+    return p, i
+    #  = pca_reduce(data)
+    # return xx
 
 
 if __name__ == "__main__":
-    main()
+    (p, i) = main()
+    d = np.concatenate((p,i))
+    dd = pca_reduce(d)
+    dd = [np.append(v, 'y') for v in dd]
+    for v in dd[16:]:
+        v[2] = 'b'
+    plot(dd)
