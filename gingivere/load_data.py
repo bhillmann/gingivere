@@ -3,16 +3,26 @@ import json
 from sklearn.decomposition import PCA
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
-#
+import os
+
+
 # from sklearn.feature_selection import SelectKBest
 # from sklearn.feature_selection import chi2
 #
 # import tables
 
+def walk_files(path):
+    for file in os.listdir(path):
+        if 'interictal' in file:
+            yield (file, 0)
+        elif 'preictal' in file:
+            yield (file, 1)
 
-def load_mat(path, number=1, state='preictal'):
-    mat = scipy.io.loadmat(path + "Dog_22/Dog_2_%s_segment_%04d.mat" % (state, number))
+
+def load_mat(path, number=1, state='preictal', patient="Dog_2"):
+    mat = scipy.io.loadmat(path + "%s/%s_%s_segment_%04d.mat" % (patient, patient, state, number))
     xx = mat['%s_segment_%d' % (state, number)][0, 0]
     data = xx[0]
     data_length_sec = xx[1]
@@ -33,6 +43,13 @@ def pca_reduce(data):
 def plot(data):
     plt.scatter([v[0] for v in data], [v[1] for v in data], c=[v[2] for v in data])
     plt.show()
+
+
+def get_data_path():
+    with open('config.json', 'r') as f:
+        DATA_PATH = json.load(f)
+        f.close()
+    return DATA_PATH
 
 
 def main():
