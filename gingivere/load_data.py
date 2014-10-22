@@ -1,6 +1,7 @@
 import scipy.io
 import json
 import numpy as np
+import re
 
 import os
 
@@ -10,22 +11,28 @@ import os
 def walk_files(path):
     for file in os.listdir(path):
         if 'interictal' in file:
-            yield (file, 0)
+            yield (path, file, 'interictal')
         elif 'preictal' in file:
-            yield (file, 1)
+            yield (path, file, 'preictal')
+        else:
+            continue
 
+def walk_training_mats(patient):
+    for data in walk_files(DATA_PATH + patient):
+        path, file, state = data
+        yield load_mat(path, file, state)
 
-def load_mat(path, number=1, state='preictal', patient="Dog_2"):
-    uniq_id = "%s_%s_segment_%04d" % (patient, state, number)
-    mat = scipy.io.loadmat(path + "%s/%s.mat" % (patient, uniq_id))
+def load_mat(path, file, state):
+    mat = scipy.io.loadmat("%s/%s" % (path, file))
     keys = ['data', 'data_length_sec', 'sampling_frequency', 'channels', 'sequence']
+    number = int(re.match(r'\d+', file.split('_')[-1]).group())
     values = mat['%s_segment_%d' % (state, number)][0, 0]
     data = dict(zip(keys, values))
     # Clean the data
     for key in keys[1:]:
         data[key] = data[key].flatten()
     data['state'] = state
-    data['id'] = uniq_id
+    data['file'] = file
     return data
 
 
@@ -36,9 +43,13 @@ def get_data_path():
     return data_path
 
 
-def main():
-    print(get_data_path())
+DATA_PATH = get_data_path()
 
+def main():
+    # for data in walk_files(DATA_PATH + "Dog_2"):
+    #     print(load_mat(*data))
+    for data in walk_training_mats("Dog_2"):
+        print(data['data'].shape)
 
 if __name__ == "__main__":
     main()
