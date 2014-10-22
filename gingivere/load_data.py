@@ -1,9 +1,6 @@
 import scipy.io
 import json
-from sklearn.decomposition import PCA
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 
 import os
 
@@ -48,12 +45,6 @@ def plot(data):
     plt.scatter([v[0] for v in data], [v[1] for v in data], c=[v[2] for v in data])
     plt.show()
 
-
-def get_data_path():
-    with open('config.json', 'r') as f:
-        DATA_PATH = json.load(f)
-        f.close()
-    return DATA_PATH
 
 def get_data_path():
     with open('config.json', 'r') as f:
