@@ -22,7 +22,7 @@ def walk_files(path):
 
 
 def load_mat(path, number=1, state='preictal', patient="Dog_2"):
-    uniq_id = "%s_%s_segment_%04d.mat" % (patient, state, number)
+    uniq_id = "%s_%s_segment_%04d" % (patient, state, number)
     mat = scipy.io.loadmat(path + "%s/%s.mat" % (patient, uniq_id))
     keys = ['data', 'data_length_sec', 'sampling_frequency', 'channels', 'sequence']
     values = mat['%s_segment_%d' % (state, number)][0, 0]
