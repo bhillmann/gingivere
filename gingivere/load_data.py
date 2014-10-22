@@ -29,10 +29,6 @@ def load_mat(path, number=1, state='preictal', patient="Dog_2"):
     return data
 
 
-def get_standard_deviations(data):
-    return np.std(data,axis=1)
-
-
 def get_data_path():
     with open('config.json', 'r') as f:
         data_path = json.load(f)
@@ -41,17 +37,8 @@ def get_data_path():
 
 
 def main():
-    DATA_PATH = get_data_path()
-    p = load_mat(DATA_PATH)
-    i = load_mat(DATA_PATH, state='interictal')
-    return p, i
+    print(get_data_path())
 
 
 if __name__ == "__main__":
-    (p, i) = main()
-    d = np.concatenate((p,i))
-    dd = pca_reduce(d)
-    dd = [np.append(v, 'y') for v in dd]
-    for v in dd[16:]:
-        v[2] = 'b'
-    plot(dd)
+    main()

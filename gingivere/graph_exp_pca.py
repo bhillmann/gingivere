@@ -12,7 +12,15 @@ def plot(data):
 
 
 def main():
-    pass
+    data_path = get_data_path()
+    p = load_mat(data_path)
+    i = load_mat(data_path, state='interictal')
+    d = np.concatenate((p,i))
+    dd = pca_reduce(d)
+    dd = [np.append(v, 'y') for v in dd]
+    for v in dd[16:]:
+        v[2] = 'b'
+    plot(dd)
 
 
 if __name__ == "__main__":
