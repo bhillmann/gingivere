@@ -124,7 +124,7 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
+# Django stuff:F
 *.log
 
 # Sphinx documentation
@@ -135,3 +135,5 @@ target/
 
 # Ignore JSON files
 *.json
+
+gingivere/data
