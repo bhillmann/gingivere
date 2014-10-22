@@ -23,16 +23,17 @@ def walk_files(path):
 
 def load_mat(path, number=1, state='preictal', patient="Dog_2"):
     mat = scipy.io.loadmat(path + "%s/%s_%s_segment_%04d.mat" % (patient, patient, state, number))
-    xx = mat['%s_segment_%d' % (state, number)][0, 0]
-    data = xx[0]
-    data_length_sec = xx[1]
-    sampling_frequency = xx[2]
-
-    channels = xx[3]
-    # Clean the channels
-    channels = [x[0] for x in channels[0]]
-    sequence = xx[4]
+    keys = ['data', 'data_length_sec', 'sampling_frequency', 'channels', 'sequence']
+    values = mat['%s_segment_%d' % (state, number)][0, 0]
+    data = dict(zip(keys, values))
+    # Clean the data
+    for key in keys[1:]:
+        data[key] = data[key].flatten()
     return data
+
+
+def get_standard_deviations(data):
+    return np.std(data,axis=1)
 
 
 def pca_reduce(data):
@@ -51,16 +52,18 @@ def get_data_path():
         f.close()
     return DATA_PATH
 
+def get_data_path():
+    with open('config.json', 'r') as f:
+        data_path = json.load(f)
+        f.close()
+    return data_path
+
 
 def main():
-    with open('config.json', 'r') as f:
-        DATA_PATH = json.load(f)
-        f.close()
+    DATA_PATH = get_data_path()
     p = load_mat(DATA_PATH)
     i = load_mat(DATA_PATH, state='interictal')
     return p, i
-    #  = pca_reduce(data)
-    # return xx
 
 
 if __name__ == "__main__":
