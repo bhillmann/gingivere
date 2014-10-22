@@ -4,11 +4,8 @@ import numpy as np
 
 import os
 
-
 # from sklearn.feature_selection import SelectKBest
 # from sklearn.feature_selection import chi2
-#
-# import tables
 
 def walk_files(path):
     for file in os.listdir(path):
@@ -34,16 +31,6 @@ def load_mat(path, number=1, state='preictal', patient="Dog_2"):
 
 def get_standard_deviations(data):
     return np.std(data,axis=1)
-
-
-def pca_reduce(data):
-    pca = PCA(n_components=2)
-    return pca.fit_transform(data)
-
-
-def plot(data):
-    plt.scatter([v[0] for v in data], [v[1] for v in data], c=[v[2] for v in data])
-    plt.show()
 
 
 def get_data_path():

@@ -1,3 +1,6 @@
+def get_standard_deviations(data):
+    return np.std(data,axis=1)
+
 def main():
     pass
 
