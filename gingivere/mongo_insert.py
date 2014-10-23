@@ -1,5 +1,6 @@
 from pymongo import MongoClient
-import load_data
+import shelve_api
+import load_raw_data
 import copy
 import json
 import shelve
@@ -14,7 +15,7 @@ def insert_patient(patient):
 
     d = collections.defaultdict(list)
 
-    for data in load_data.walk_training_mats(patient):
+    for data in load_raw_data.walk_training_mats(patient):
         post_item = copy.deepcopy(data)
         del post_item['data']
         for i, item in enumerate(data['data']):
@@ -28,11 +29,7 @@ def insert_patient(patient):
             del post_item['_id']
 
     df = pd.DataFrame(d)
-    s = shelve.open('./data/shelve', writeback=True)
-    try:
-        s[patient] = df
-    finally:
-        s.close()
+    shelve_api.insert(df)
 
 if __name__ == "__main__":
     insert_patient('Dog_2')

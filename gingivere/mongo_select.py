@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 import random
-import shelve_select
+import shelve_api
 import collections
 
 INTERICTAL_QUERY = {'state':  'interictal'}
@@ -22,8 +22,9 @@ def find_random_docs(posts, query, num):
 def load_random_training_set(db, patient, num=500):
     convert = {'interictal': 0, 'preictal': 1}
     data_dict = collections.defaultdict(list)
-    for state in ('preictal', 'interictal'):
+    for state in ['preictal', 'interictal']:
         for result in get_rand_docs(db, patient, state, num):
+            print(state)
             for key in ['data', '_id', 'state']:
                 if (key == 'state'):
                     data_dict[key].append(convert[result[key]])
@@ -34,7 +35,7 @@ def load_random_training_set(db, patient, num=500):
 def get_rand_docs(db, patient, state, num=500):
     #TODO change later to patient
     collection = db['posts']
-    df = shelve_select.load_patient(patient)
+    df = shelve_api.load(patient)
     selection = df[df['state'] == state]
     l_id = list(selection['_id'])
     random.shuffle(l_id)
