@@ -2,35 +2,38 @@ from pymongo import MongoClient
 import load_data
 import copy
 import json
+import shelve
+import pandas as pd
+import collections
 
-def insert_patient(name):
+def insert_patient(patient):
     name_to_post_id = {}
     client = MongoClient()
     db = client['gingivere']
-    posts = db[name]
-    count_i = 0
-    count_p = 0
+    posts = db[patient]
 
-    for data in load_data.walk_training_mats(name):
+    d = collections.defaultdict(list)
+
+    for data in load_data.walk_training_mats(patient):
         post_item = copy.deepcopy(data)
         del post_item['data']
         for i, item in enumerate(data['data']):
             post_item['data'] = item.tolist()
-            if 'interictal' in data['file']:
-                post_item['int_id'] = count_i
-                count_i += 1
-            elif 'preictal' in data['file']:
-                post_item['int_id'] = count_p
-                count_p += 1
-            post_id = posts.insert(post_item)
             name = "%02d_%s" % (i, data['file'])
-            name_to_post_id[name] = str(post_id)
+            post_id = posts.insert(post_item)
+            d['name'].append(name)
+            d['post_id'] = str(post_id)
             print("Just posted: " + name)
             del post_item['_id']
 
-    with open("posts.json", "w") as f:
-        json.dump(str(name_to_post_id), f)
-        f.close()
+    df = pd.DataFrame(d)
+    s = shelve.open('./data/shelve', writeback=True)
+    try:
+        s[patient] = df
+    finally:
+        s.close()
+
+
 
 if __name__ == "__main__":
     insert_patient('Dog_2')
