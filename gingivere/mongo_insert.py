@@ -22,7 +22,8 @@ def insert_patient(patient):
             name = "%02d_%s" % (i, data['file'])
             post_id = posts.insert(post_item)
             d['name'].append(name)
-            d['post_id'] = str(post_id)
+            d['_id'].append(str(post_id))
+            d['state'].append(post_item['state'])
             print("Just posted: " + name)
             del post_item['_id']
 
@@ -32,8 +33,6 @@ def insert_patient(patient):
         s[patient] = df
     finally:
         s.close()
-
-
 
 if __name__ == "__main__":
     insert_patient('Dog_2')

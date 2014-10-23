@@ -73,12 +73,3 @@ if __name__ == "__main__":
     client = MongoClient()
     db = client['gingivere']
     posts = db.posts
-    # print(posts.find_one())
-    # interictal = {}
-    # interictal['state'] = 'interictal'
-    # # print(posts.find(interictal).count())
-    # # results = find_random_docs(posts, interictal, 50)
-    # # print(len(results))
-    # preictal_df, interictal_df = load_random_training_set(posts)
-    add_int_to_collection(posts, INTERICTAL_QUERY)
-    add_int_to_collection(posts, PREICTAL_QUERY)
