@@ -3,8 +3,8 @@ import random
 import shelve_select
 import collections
 
-INTERICTAL_QUERY = {'state':  'interictal}'
-PREICTAL_QUERY = {'state' = 'preictal'}
+INTERICTAL_QUERY = {'state':  'interictal'}
+PREICTAL_QUERY = {'state': 'preictal'}
 
 def get_all_preictals(collection):
     return collection.find(PREICTAL_QUERY)
@@ -19,21 +19,17 @@ def find_random_docs(posts, query, num):
     rand_eles = posts.find(query)
     return rand_eles
 
-def template_dict(dict, result):
-    convert = {'interictal': 0, 'preictal': 1}
-    for string in ['data', '_id', 'state']:
-        if string == 'state':
-            dict[string].append(convert[string])
-        else:
-            dict[string].append(result[string])
-    return dict
-
 def load_random_training_set(db, patient, num=500):
-    d = collections.defaultdict()
+    convert = {'interictal': 0, 'preictal': 1}
+    data_dict = collections.defaultdict(list)
     for state in ('preictal', 'interictal'):
         for result in get_rand_docs(db, patient, state, num):
-            d = template_dict(d, result)
-    return d
+            for key in ['data', '_id', 'state']:
+                if (key == 'state'):
+                    data_dict[key].append(convert[result[key]])
+                else:
+                    data_dict[key].append(result[key])
+    return data_dict
 
 def get_rand_docs(db, patient, state, num=500):
     #TODO change later to patient
@@ -50,3 +46,4 @@ if __name__ == "__main__":
     client = MongoClient()
     db = client['gingivere']
     collection = db.posts
+    data_dict = load_random_training_set(db, 'Dog_2')
