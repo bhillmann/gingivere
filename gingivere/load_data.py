@@ -30,7 +30,10 @@ def load_mat(path, file, state):
     data = dict(zip(keys, values))
     # Clean the data
     for key in keys[1:]:
-        data[key] = data[key].flatten()
+        data[key] = data[key].flatten()[0]
+    data['channels'] = data['channels'][0]
+    data['sequence'] = int(data['sequence'])
+    data['data_length_sec'] = int(data['data_length_sec'])
     data['state'] = state
     data['file'] = file
     return data
@@ -42,7 +45,7 @@ def get_data_path():
         f.close()
     return config['data']
 
-gef get_db_path():
+def get_db_path():
     with open('config.json', 'r') as f:
         config = json.load(f)
         f.close()
