@@ -38,12 +38,19 @@ def load_mat(path, file, state):
 
 def get_data_path():
     with open('config.json', 'r') as f:
-        data_path = json.load(f)
+        config = json.load(f)
         f.close()
-    return data_path
+    return config['data']
+
+gef get_db_path():
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+        f.close()
+    return config['mongo']
 
 
 DATA_PATH = get_data_path()
+DB_PATH = get_db_path()
 
 def main():
     # for data in walk_files(DATA_PATH + "Dog_2"):
