@@ -1,23 +1,16 @@
 from pymongo import MongoClient
-import json
-import ast
-from random import randint, shuffle
-import numpy as np
-import pandas as pd
-import copy
+import random
+import shelve_select
+import collections
 
-def add_int_to_collection(posts, query):
-    cursor = posts.find(query)
-    for i, doc in enumerate(cursor):
-        doc['int_id'] = i
-        posts.save(doc)
-    cursor.close()
+INTERICTAL_QUERY = {'state':  'interictal}'
+PREICTAL_QUERY = {'state' = 'preictal'}
 
-def get_all_preictals(posts):
-    return posts.find(PREICTAL_QUERY)
+def get_all_preictals(collection):
+    return collection.find(PREICTAL_QUERY)
 
-def get_all_interictals(posts):
-    return posts.find(INTERICTAL_QUERY)
+def get_all_interictals(collection):
+    return collection.find(INTERICTAL_QUERY)
 
 def find_random_docs(posts, query, num):
     n = posts.find(query).count()
@@ -26,50 +19,34 @@ def find_random_docs(posts, query, num):
     rand_eles = posts.find(query)
     return rand_eles
 
-#doesn't work
-def load_name_to_post_id(path):
-    with open(path) as f:
-        st = f.read()
-        name_to_post_id = ast.literal_eval(st[1:-1])
-    return name_to_post_id
+def template_dict(dict, result):
+    convert = {'interictal': 0, 'preictal': 1}
+    for string in ['data', '_id', 'state']:
+        if string == 'state':
+            dict[string].append(convert[string])
+        else:
+            dict[string].append(result[string])
+    return dict
 
-def import_vectors(query, limit=None):
-    if limit:
-        my_cursor = db.inventory.find(query, limit)
-    else:
-        my_cursor = db.inventory.find(query)
-    return my_cursor
+def load_random_training_set(db, patient, num=500):
+    d = collections.defaultdict()
+    for state in ('preictal', 'interictal'):
+        for result in get_rand_docs(db, patient, state, num):
+            d = template_dict(d, result)
+    return d
 
-def load_random_training_set(posts, num=500):
-    preictal_results = find_random_docs(posts, PREICTAL_QUERY, num)
-    interictal_results = find_random_docs(posts, INTERICTAL_QUERY, num)
-    preictal_df = pd.DataFrame.from_dict(preictal_results)
-    interictal_df = pd.DataFrame.from_dict(interictal_results)
-    return preictal_df, interictal_df
-
-    # preictal_X = [i['data'] for i in preictal_results]
-    # interictal_X = [i['data'] for i in interictal_results]
-    # preictal_y = [1 for i in preictal_results]
-    # interictal_y = [0 for i in interictal_results]
-    # preictal_names =
-    # preictal_names =
-    # combined = zip(preictal_X+interictal_X, preictal_y + interictal_y)
-    # random.shuffle(combined)
-    # shuffled_X, shuffled_Y =
-
-
-
-
-def main():
-    # name_to_post_id = load_name_to_post_id("posts.json")
-    pass
-
-INTERICTAL_QUERY = {}
-INTERICTAL_QUERY['state'] = 'interictal'
-PREICTAL_QUERY = {}
-PREICTAL_QUERY['state'] = 'preictal'
+def get_rand_docs(db, patient, state, num=500):
+    #TODO change later to patient
+    collection = db['posts']
+    df = shelve_select.load_patient(patient)
+    selection = df[df['state'] == state]
+    l_id = list(selection['_id'])
+    random.shuffle(l_id)
+    l_id = l_id[:num]
+    query = {'state': state, '_id': {'$in': l_id}}
+    return collection.find(query)
 
 if __name__ == "__main__":
     client = MongoClient()
     db = client['gingivere']
-    posts = db.posts
+    collection = db.posts
