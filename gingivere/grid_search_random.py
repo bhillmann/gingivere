@@ -55,7 +55,7 @@ for score in scores:
     print("The scores are computed on the full evaluation set.")
     print()
 
-    skf = cross_validation.StratifiedKFold(y, n_folds=2)
+    skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
