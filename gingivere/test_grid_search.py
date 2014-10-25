@@ -1,17 +1,14 @@
 from __future__ import print_function
 
+import numpy as np
+
 from sklearn.pipeline import Pipeline
-
 from sklearn.cross_validation import StratifiedKFold
-
 from sklearn.cross_validation import train_test_split
 from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 from sklearn.decomposition import RandomizedPCA
-
-
-
 import load_data
 
 print(__doc__)
@@ -20,14 +17,14 @@ print(__doc__)
 
 data = load_data.load_shelve('test')
 
-X = data['data']
-y = data['state']
+X = np.array(data['data'])
+y = np.array(data['state'])
 
-estimators = [('pca', RandomizedPCA(whiten=True)), ('svm', SVC(probability=True))]
+estimators = [('pca', RandomizedPCA()), ('svm', SVC(probability=True))]
 
 # Set the parameters by cross-validation
-tuned_parameters = {'svm__kernel': ['rbf'], 'svm__gamma': [1e-3],
-                     'svm__C': [1, 10, 100, 1000], 'pca__n_components': [100,1000,10000]}
+tuned_parameters = {'svm__kernel': ['rbf',], 'svm__gamma': [1e-3],
+                     'svm__C': [100], 'pca__n_components': [100, 1000], 'pca__whiten':[True, False]}
 tuned_clf = Pipeline(estimators)
 
 scores = ['roc_auc']
@@ -50,14 +47,14 @@ for score in scores:
               % (mean_score, scores.std() / 2, params))
     print()
 
-    print("Detailed classification report:")
-    print()
-    print("The model is trained on the full development set.")
-    print("The scores are computed on the full evaluation set.")
-    print()
 
     skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:
+        print("Detailed classification report:")
+        print()
+        print("The model is trained on the full development set.")
+        print("The scores are computed on the full evaluation set.")
+        print()
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
         y_true, y_pred = y_test, clf.predict(X_test)
