@@ -2,13 +2,15 @@ from __future__ import print_function
 
 import numpy as np
 
+from sklearn import preprocessing
+
 from sklearn.pipeline import Pipeline
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.cross_validation import train_test_split
 from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
-from sklearn.decomposition import RandomizedPCA
+from sklearn.decomposition import KernelPCA
 import load_data
 
 print(__doc__)
@@ -17,14 +19,14 @@ print(__doc__)
 
 data = load_data.load_shelve('test')
 
-X = np.array(data['data'])
+X = preprocessing.scale(np.array(data['data']))
 y = np.array(data['state'])
 
-estimators = [('pca', RandomizedPCA()), ('svm', SVC(probability=True))]
+estimators = [('pca', KernelPCA()), ('svm', SVC(probability=True))]
 
 # Set the parameters by cross-validation
 tuned_parameters = {'svm__kernel': ['rbf',], 'svm__gamma': [1e-3],
-                     'svm__C': [100], 'pca__n_components': [100, 1000], 'pca__whiten':[True, False]}
+                     'svm__C': [100], 'pca__n_components': [100,], 'pca__kernel':['rbf','linear']}
 tuned_clf = Pipeline(estimators)
 
 scores = ['roc_auc']
@@ -63,3 +65,8 @@ for score in scores:
 
 # Note the problem is too easy: the hyperparameter plateau is too flat and the
 # output model is the same for precision and recall with ties in quality.
+
+# Pipeline(steps=[('pca', RandomizedPCA(copy=True, iterated_power=3, n_components=100,
+#        random_state=None, whiten=True)), ('svm', SVC(C=100, cache_size=200, class_weight=None, coef0=0.0, degree=3,
+#   gamma=0.001, kernel='rbf', max_iter=-1, probability=True,
+#   random_state=None, shrinking=True, tol=0.001, verbose=False))])
