@@ -10,23 +10,22 @@ from sklearn.cross_validation import train_test_split
 from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
-from sklearn.decomposition import KernelPCA
+# from sklearn.decomposition import KernelPCA
+from sklearn.decomposition import PCA
 import load_data
 
 print(__doc__)
-
-# Loading the Digits dataset
 
 data = load_data.load_shelve('test')
 
 X = preprocessing.scale(np.array(data['data']))
 y = np.array(data['state'])
 
-estimators = [('pca', KernelPCA()), ('svm', SVC(probability=True))]
+estimators = [('pca', PCA(whiten=True)), ('svm', SVC(probability=True))]
 
 # Set the parameters by cross-validation
 tuned_parameters = {'svm__kernel': ['rbf',], 'svm__gamma': [1e-3],
-                     'svm__C': [100], 'pca__n_components': [100,], 'pca__kernel':['rbf','linear']}
+                     'svm__C': [100], 'pca__n_components': [100,]}
 tuned_clf = Pipeline(estimators)
 
 scores = ['roc_auc']
