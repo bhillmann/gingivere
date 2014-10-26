@@ -26,7 +26,7 @@ estimators = [('pca', PCA(whiten=True)), ('svm', SVC(probability=True))]
 # Set the parameters by cross-validation
 tuned_parameters = {'svm__kernel': ['rbf',], 'svm__gamma': [1e-3],
                      'svm__C': [100], 'pca__n_components': [100,]}
-tuned_clf = Pipeline(estimators)
+tuned_clf = Pipeline(estimators) 
 
 scores = ['roc_auc']
 
