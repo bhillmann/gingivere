@@ -4,6 +4,7 @@ import pandas as pd
 
 import raw_data_clf
 import mongo_select
+import shelve_api
 
 from collections import defaultdict
 
@@ -19,9 +20,13 @@ d = defaultdict(list)
 
 for item in mongo_select.get_all():
     data = item['data']
-    prediction = clf.predict(data)
-    d['pred'].append(prediction)
+    prediction = clf.predict_proba(data)
+    d['pred'].append(prediction[0])
     del item['data']
     for key in item:
-        d[key].append()
-    print("Just predicted %d for %n" % (prediciton, item['name']))
+        d[key].append(item[key])
+    print("Just predicted %s for %s" % (prediction[0], item['file']))
+
+
+shelve_api.insert(d, 'proba_p')
+# print("Just scored %d" % s/count)

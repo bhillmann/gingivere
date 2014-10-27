@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import load_data
+import mongo_select
 
 import numpy as np
 import pandas as pd
@@ -25,7 +26,7 @@ class RawClf:
         self.train_svm()
 
     def load_data(self):
-        data = load_data.load_shelve('test')
+        data = mongo_select.load_random_training_set('Dog_2', num=1000)
         self.X =data['data']
         self.y = data['state']
 
@@ -46,6 +47,9 @@ class RawClf:
 
     def predict(self, x):
         return self.SVM.predict(self.PCA.transform(x))
+
+    def predict_proba(self, x):
+        return self.SVM.predict_proba(self.PCA.transform(x))
 
     def clear_data(self):
         self.X = []

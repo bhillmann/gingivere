@@ -28,12 +28,12 @@ def find_random_docs(collection, query, num):
     rand_eles = collection.find(query)
     return rand_eles
 
-def load_random_training_set(db, patient, num=500):
+def load_random_training_set(patient, num=500):
     convert = {'interictal': 0, 'preictal': 1}
     data_dict = collections.defaultdict(list)
     for state in ['preictal', 'interictal']:
         for result in get_rand_docs(db, patient, state, num):
-            print(state)
+            # print(state)
             for key in ['data', '_id', 'state']:
                 if (key == 'state'):
                     data_dict[key].append(convert[result[key]])
