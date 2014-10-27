@@ -3,8 +3,17 @@ import random
 import shelve_api
 import collections
 
+client = MongoClient()
+db = client['gingivere']
+collection = db.posts
+
 INTERICTAL_QUERY = {'state':  'interictal'}
 PREICTAL_QUERY = {'state': 'preictal'}
+
+
+def get_all():
+    #TODO change to collection name
+    return collection.find()
 
 def get_all_preictals(collection):
     return collection.find(PREICTAL_QUERY)
@@ -12,11 +21,11 @@ def get_all_preictals(collection):
 def get_all_interictals(collection):
     return collection.find(INTERICTAL_QUERY)
 
-def find_random_docs(posts, query, num):
-    n = posts.find(query).count()
+def find_random_docs(collection, query, num):
+    n = collection.find(query).count()
     rs = [randint(0,n-1) for i in range(num)]
     query['int_id'] = {'$in' : rs}
-    rand_eles = posts.find(query)
+    rand_eles = collection.find(query)
     return rand_eles
 
 def load_random_training_set(db, patient, num=500):
