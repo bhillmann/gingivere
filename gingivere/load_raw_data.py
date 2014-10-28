@@ -30,8 +30,12 @@ def load_mat(path, file, state):
     data = dict(zip(keys, values))
     # Clean the data
     for key in keys[1:]:
+        if key == 'channels':
+            channels = data[key][0]
+            channels = [i[0] for i in channels]
+            continue
         data[key] = data[key].flatten()[0]
-    data['channels'] = data['channels'][0]
+    data['channels'] = channels
     data['sequence'] = int(data['sequence'])
     data['data_length_sec'] = int(data['data_length_sec'])
     data['state'] = state
