@@ -9,7 +9,7 @@ import shelve_api
 from collections import defaultdict
 
 print("Training the CLF")
-clf = raw_data_clf.RawClf('dog_2')
+clf = raw_data_clf.RawClf('labeled_Dog_2')
 clf.clear_data()
 
 print()

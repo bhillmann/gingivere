@@ -26,12 +26,13 @@ class RawClf:
         self.train_svm()
 
     def load_data(self):
-        data = mongo_select.load_random_training_set('Dog_2', num=1000)
+        data = mongo_select.load_random_training_set('Dog_2', num=600)
+        print(data)
         self.X =data['data']
         self.y = data['state']
 
     def preprocess_data(self):
-        self.X = np.array(self.X).astype(np.float)
+        self.X = np.array(self.X)
         self.y = np.array(self.y)
         self.X = preprocessing.scale(self.X)
 
@@ -71,4 +72,4 @@ class RawClf:
 
 
 if __name__ == "__main__":
-    clf = RawClf('test')
+    clf = RawClf('Dog_2')

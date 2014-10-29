@@ -33,7 +33,7 @@ def insert_patient(patient):
             del post_item['_id']
 
     df = pd.DataFrame(d)
-    shelve_api.insert(df)
+    shelve_api.insert(df, "labeled_" + patient)
 
 if __name__ == "__main__":
     insert_patient('Dog_2')
