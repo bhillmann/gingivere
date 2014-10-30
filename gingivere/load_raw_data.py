@@ -18,7 +18,7 @@ def walk_files(path):
             continue
 
 def walk_training_mats(patient):
-    for data in walk_files(DATA_PATH + patient):
+    for data in walk_files(DATA_PATH + '/' + patient):
         path, file, state = data
         yield load_mat(path, file, state)
 
@@ -28,6 +28,7 @@ def load_mat(path, file, state):
     number = int(re.match(r'\d+', file.split('_')[-1]).group())
     values = mat['%s_segment_%d' % (state, number)][0, 0]
     data = dict(zip(keys, values))
+    data['data'] = data['data'].astype('float32')
     # Clean the data
     for key in keys[1:]:
         if key == 'channels':
