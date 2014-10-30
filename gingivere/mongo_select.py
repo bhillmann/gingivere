@@ -10,8 +10,8 @@ INTERICTAL_QUERY = {'state':  'interictal'}
 PREICTAL_QUERY = {'state': 'preictal'}
 
 
-def get_all(collection):
-    #TODO change to collection name
+def get_all(patient, db=MongoClient()['gingivere']):
+    collection = db[patient]
     return collection.find()
 
 def get_all_preictals(collection):
@@ -41,8 +41,6 @@ def load_random_training_set(patient, num=500, db=MongoClient()['gingivere']):
     return data_dict
 
 def get_rand_docs(db, patient, state, num=500):
-    #TODO change later to patient
-    print(patient)
     collection = db[patient]
     df = shelve_api.load('labeled_' + patient)
     selection = df[df['state'] == state]

@@ -47,7 +47,7 @@ def bulk_write():
 if __name__ == "__main__":
     client = motor.MotorClient()
     db = motor.MotorDatabase(client, 'gingivere')
-    collection = motor.MotorCollection(db, 'Dog_2')
+    collection = motor.MotorCollection(db, 'Dog_1')
     tornado.ioloop.IOLoop.current().run_sync(bulk_write)
     df = pd.DataFrame(d)
-    shelve_api.insert(df, 'test_dog_2')
+    shelve_api.insert(df, 'test_dog_1')

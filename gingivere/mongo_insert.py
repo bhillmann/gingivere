@@ -36,4 +36,4 @@ def insert_patient(patient):
     shelve_api.insert(df, "labeled_" + patient)
 
 if __name__ == "__main__":
-    insert_patient('Dog_2')
+    insert_patient('Dog_1')
