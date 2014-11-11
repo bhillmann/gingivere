@@ -48,7 +48,6 @@ for score in scores:
               % (mean_score, scores.std() / 2, params))
     print()
 
-
     skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:
         print("Detailed classification report:")

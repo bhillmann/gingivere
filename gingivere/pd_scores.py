@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-import pandas as pd
-
 import raw_data_clf
 import mongo_select
 import shelve_api
