@@ -11,13 +11,14 @@ for name in df.file:
     name = name.split('.')[0]
     data_df = store[name]
     data_df = data_df.astype('float64')
+    c = data_df.shape[0]
     data_df = data_df.T
     corr = data_df.corr()
     vs = []
     corrs = []
-    for i in range(16):
+    for i in range(c):
         vs.append(data_df.icol(i).var())
-        for j in range(i, 16):
+        for j in range(i, c):
             if j == i:
                 continue
             else:

@@ -83,13 +83,13 @@ class RawClf:
             print("The scores are computed on the full evaluation set.")
             print()
             X_train, X_test = self.X[train_index], self.X[test_index]
-            # PCA = self.get_pca()
-            # PCA.fit(self.X)
+            PCA = self.get_pca()
+            PCA.fit(self.X)
             y_train, y_test = self.y[train_index], self.y[test_index]
             SVC = self.get_svm()
-            # X_train = PCA.transform(X_train)
+            X_train = PCA.transform(X_train)
             SVC.fit(X_train, y_train)
-            # X_test = PCA.transform(X_test)
+            X_test = PCA.transform(X_test)
             y_true, y_pred = y_test, SVC.predict(X_test)
             print(classification_report(y_true, y_pred))
             print()
