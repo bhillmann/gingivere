@@ -13,6 +13,7 @@ from sklearn.cross_validation import StratifiedKFold
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 from sklearn.metrics import roc_auc_score
 
@@ -25,6 +26,8 @@ class RawClf:
         if data:
             self.X = data[0]
             self.y = data[1]
+            # self.scaler = StandardScaler()
+            # self.X = self.scaler.fit_transform(self.X)
         else:
             # self.load_data()
             self.preprocess_data()
@@ -46,14 +49,16 @@ class RawClf:
         # print(self.X[0])
 
     def get_pca(self):
-        return PCA(copy=True, n_components=100, whiten=False)
+        return PCA(copy=True, n_components=100, whiten=True)
 
     def train_pca(self):
         self.PCA = PCA(copy=True, n_components=100, whiten=False)
         self.PCA.fit(self.X)
 
     def get_svm(self):
-        return SVC(C=100, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.001, kernel='rbf', max_iter=-1, random_state=None, shrinking=True, tol=0.001, verbose=False)
+
+        # return SVC(C=100, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.001, kernel='rbf', max_iter=-1, random_state=None, shrinking=True, tol=0.001, verbose=False)
+        return KNeighborsClassifier()
 
     def train_svm(self):
         self.SVM = SVC(C=100, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.001, kernel='rbf', max_iter=-1, random_state=None, shrinking=True, tol=0.001, verbose=False)

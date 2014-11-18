@@ -1,7 +1,7 @@
- from __future__ import print_function
+from __future__ import print_function
+import ipdb
 
 import pandas as pd
-import numpy as np
 
 import load_raw_data
 from collections import defaultdict
@@ -12,6 +12,8 @@ patients = ["Dog_1", "Dog_2", "Dog_3", "Dog_4", "Dog_5", "Patient_1", "Patient_2
 d_keys = ['data_length_sec', 'sampling_frequency', 'sequence', 'state', 'file']
 
 d = defaultdict(list)
+ipdb.set_trace()  ######### Break Point ###########
+
 
 for patient in patients:
     for data in load_raw_data.walk_training_mats(patient):

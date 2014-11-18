@@ -9,6 +9,7 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 from sklearn.decomposition import RandomizedPCA
+from sklearn.neighbors import KNeighborsClassifier
 
 
 
@@ -23,7 +24,7 @@ data = load_data.load_shelve('test')
 X = data['data']
 y = data['state']
 
-estimators = [('pca', RandomizedPCA(whiten=True)), ('svm', SVC(probability=True))]
+estimators = [('pca', RandomizedPCA(whiten=True)), ('svm', KNeighborsClassifier())]
 
 # Set the parameters by cross-validation
 tuned_parameters = {'svm__kernel': ['rbf'], 'svm__gamma': [1e-3],
@@ -36,7 +37,8 @@ for score in scores:
     print("# Tuning hyper-parameters for %s" % score)
     print()
 
-    clf = GridSearchCV(tuned_clf, tuned_parameters, cv=StratifiedKFold(y, n_folds=3), scoring=score)
+    # clf = GridSearchCV(KNeighborsClassifier(), {}, cv=StratifiedKFold(y, n_folds=3), scoring=score)
+    clf = GridSearchCV(tuned_clf, {}, cv=StratifiedKFold(y, n_folds=3), scoring=score)
     clf.fit(X, y)
 
     print("Best parameters set found on development set:")
@@ -49,20 +51,6 @@ for score in scores:
         print("%0.3f (+/-%0.03f) for %r"
               % (mean_score, scores.std() / 2, params))
     print()
-
-    print("Detailed classification report:")
-    print()
-    print("The model is trained on the full development set.")
-    print("The scores are computed on the full evaluation set.")
-    print()
-
-    skf = StratifiedKFold(y, n_folds=2)
-    for train_index, test_index in skf:
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
-        y_true, y_pred = y_test, clf.predict(X_test)
-        print(classification_report(y_true, y_pred))
-        print()
 
 # Note the problem is too easy: the hyperparameter plateau is too flat and the
 # output model is the same for precision and recall with ties in quality.
