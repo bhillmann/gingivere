@@ -1,8 +1,6 @@
 from __future__ import print_function
-import ipdb
 
 import pandas as pd
-
 import load_raw_data
 from collections import defaultdict
 
@@ -23,7 +21,6 @@ for patient in patients:
         store = pd.HDFStore("D:/gingivere/data.h5")
         store[name] = df
         store.close()
-        ipdb.set_trace()  ######### Break Point ###########
 
 
 store = pd.HDFStore("D:/gingivere/data.h5")

@@ -28,4 +28,3 @@ for item in mongo_select.get_all('Dog_2'):
 
 
 shelve_api.insert(d, 'preds')
-# print("Just scored %d" % s/count)

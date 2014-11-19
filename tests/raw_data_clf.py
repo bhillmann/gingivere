@@ -1,8 +1,6 @@
 from __future__ import print_function
 
-# import load_data
 import shelve_api
-# import mongo_select
 
 import numpy as np
 import pandas as pd
