@@ -6,15 +6,38 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 import random
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+import shelve_api
+
+def yield_patient_names(name, d):
+    for key in d:
+        if name in key:
+            yield key
+
+new_d = {}
+d = shelve_api.load('baseline')
+for key in yield_patient_names('Dog_1', d):
+    new_d[key] = d[key]
+for key in yield_patient_names('Dog_2', d):
+    new_d[key] = d[key]
+for key in yield_patient_names('Dog_3', d):
+    new_d[key] = d[key]
+for key in yield_patient_names('Dog_4', d):
+    new_d[key] = d[key]
+# for key in yield_patient_names('Dog_5', d):
+#     new_d[key] = d[key]
 
 
+# store = pd.HDFStore("D:/gingivere/data.h5")
+# data = store['baseline']
+# store.close()
 
-store = pd.HDFStore("D:/gingivere/data.h5")
-data = store['baseline']
-store.close()
+# mask = ['Dog_4' in name for name in data]
+# df_all = data.loc[:,mask]
 
-mask = ['Dog_4' in name for name in data]
-df_all = data.loc[:,mask]
+df_all = pd.DataFrame(new_d)
 
 X = []
 y = []
@@ -22,13 +45,14 @@ num_preictals = sum([1 if 'preictal' in name else 0 for name in df_all])
 ix = random.sample(range(len(df_all.T)-num_preictals), num_preictals)
 
 for i, label in enumerate(df_all):
-    if 'interictal' in label and i in ix:
+    if 'interictal' in label:
         print(i, label)
         y.append(0)
-        X.append(df_all[label])
+        X.append(df_all[label][:-2])
     elif 'preictal' in label:
-        y.append(1)
-        X.append(df_all[label])
+        for j in range(9):
+            y.append(1)
+            X.append(df_all[label][:-2])
     else:
         # print("whoops")
         continue
@@ -38,9 +62,11 @@ for i, label in enumerate(df_all):
 
 y = np.array(y)
 
-X = df_all.T.values
+X = np.array(X)
 
-clf = SVC(C=100, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.001, kernel='rbf', max_iter=-1, random_state=None, shrinking=True, tol=0.001, verbose=False)
+clf = KNeighborsClassifier(n_neighbors=11)
+# clf = RandomForestClassifier(n_estimators=20)
+# clf = SVC(gamma=0.001, kernel='rbf', C=100)
 
 skf = StratifiedKFold(y, n_folds=2)
 for train_index, test_index in skf:
