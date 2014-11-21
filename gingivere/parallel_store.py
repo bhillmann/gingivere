@@ -1,5 +1,7 @@
 import load_raw_data as lrd
 
+import shelve_api as sapi
+
 from sklearn import preprocessing
 import pandas as pd
 import numpy as np
@@ -30,7 +32,9 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2:
         patient = sys.argv[1]
         res = Parallel(n_jobs=num_cores)(delayed(process_data)(i) for i in lrd.walk_files(patient))
+        sapi.insert(res, "%s_mm" % patient)
     else:
         for patient in patients:
             res =  Parallel(n_jobs=num_cores)(delayed(process_data)(i) for i in lrd.walk_files(patient))
+            sapi.insert(res, "%s_mm" % patient)
     print("Finished in", time.time()-now , "sec")
