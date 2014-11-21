@@ -2,11 +2,12 @@ import scipy.io
 import json
 import numpy as np
 import re
-
 import os
 
-def walk_files(patient):
-    path = DATA_PATH + '/' + patient
+
+def walk_files(patient, path="default"):
+    if path == 'default':
+        path = DATA_PATH + '/' + patient
     for file in os.listdir(path):
         if 'interictal' in file:
             yield (path, file, 'interictal')
