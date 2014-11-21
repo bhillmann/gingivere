@@ -5,30 +5,29 @@ import re
 
 import os
 
-# from sklearn.feature_selection import SelectKBest
-# from sklearn.feature_selection import chi2
-
-def walk_files(path):
-    for file in os.listdir(path):
+def walk_files(patient):
+    for file in os.listdir(DATA_PATH + '/' + patient):
         if 'interictal' in file:
             yield (path, file, 'interictal')
         elif 'preictal' in file:
             yield (path, file, 'preictal')
         else:
-            continue
+            yield (path, file, 'test')
 
 def walk_training_mats(patient):
-    for data in walk_files(DATA_PATH + '/' + patient):
+    for data in walk_files(patient):
         path, file, state = data
         yield load_mat(path, file, state)
 
 def load_mat(path, file, state):
     mat = scipy.io.loadmat("%s/%s" % (path, file))
     keys = ['data', 'data_length_sec', 'sampling_frequency', 'channels', 'sequence']
+    if state == 'test':
+        keys = keys[:-1]
     number = int(re.match(r'\d+', file.split('_')[-1]).group())
     values = mat['%s_segment_%d' % (state, number)][0, 0]
     data = dict(zip(keys, values))
-    data['data'] = data['data'].astype('float32')
+    data['data'] = data['data'].astype('float64')
     # Clean the data
     for key in keys[1:]:
         if key == 'channels':
@@ -37,7 +36,8 @@ def load_mat(path, file, state):
             continue
         data[key] = data[key].flatten()[0]
     data['channels'] = channels
-    data['sequence'] = int(data['sequence'])
+    if state != 'test':
+        data['sequence'] = int(data['sequence'])
     data['data_length_sec'] = int(data['data_length_sec'])
     data['state'] = state
     data['file'] = file
