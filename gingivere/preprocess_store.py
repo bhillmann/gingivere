@@ -17,11 +17,13 @@ def preprocess_data(input):
     data = store['data']
     size = 20000
     num_splits = int(data.shape[1]/size)
-    X = np.array([])
+    data = data.T
+    X = []
     for row in data:
-        for x in np.array_split(row, num_splits):
-            np.append(X, np.histogram(x, density=True, range=r) )
-    store['X'] = np.asarray(X)
+        for x in np.array_split(data[row], num_splits):
+            hist = np.histogram(x, density=True, range=r)
+            X.append(hist)
+    store['X'] = pd.DataFrame(X, dtype='float64')
     store.close()
     print(file)
     return len(X)

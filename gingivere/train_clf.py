@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import multiprocessing
 from sklearn.linear_model import LinearRegression
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.metrics import classification_report
