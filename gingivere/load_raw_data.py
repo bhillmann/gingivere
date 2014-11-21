@@ -6,12 +6,13 @@ import re
 import os
 
 def walk_files(patient):
-    for file in os.listdir(DATA_PATH + '/' + patient):
+    path = DATA_PATH + '/' + patient
+    for file in os.listdir(path):
         if 'interictal' in file:
             yield (path, file, 'interictal')
         elif 'preictal' in file:
             yield (path, file, 'preictal')
-        else:
+        elif 'test' in file:
             yield (path, file, 'test')
 
 def walk_training_mats(patient):
@@ -50,15 +51,15 @@ def get_data_path():
         f.close()
     return config['data']
 
-def get_db_path():
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-        f.close()
-    return config['mongo']
+# def get_db_path():
+#     with open('config.json', 'r') as f:
+#         config = json.load(f)
+#         f.close()
+#     return config['mongo']
 
 
 DATA_PATH = get_data_path()
-DB_PATH = get_db_path()
+# DB_PATH = get_db_path()
 
 def main():
     # for data in walk_files(DATA_PATH + "Dog_2"):
