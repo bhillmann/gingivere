@@ -13,7 +13,7 @@ print(__doc__)
 
 def preprocess_data(input):
     file, r = input
-    store = pd.HDFStore("D:/gingivere/data/%s.h5" % name)
+    store = pd.HDFStore(file)
     data = store['data']
     size = 20000
     num_splits = int(data.shape[1]/size)
@@ -21,7 +21,7 @@ def preprocess_data(input):
     for row in data:
         for x in np.array_split(row, num_splits):
             np.append(X, np.histogram(x, density=True, range=r) )
-    store['X'] = X
+    store['X'] = np.asarray(X)
     store.close()
     print(file)
     return len(X)

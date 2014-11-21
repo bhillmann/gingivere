@@ -48,9 +48,6 @@ skf = StratifiedKFold(y, n_folds=2)
 for train_index, test_index in skf:
     print("Detailed classification report:")
     print()
-    print("The model is trained on the full development set.")
-    print("The scores are computed on the full evaluation set.")
-    print()
     X_train, X_test = X[train_index], X[test_index]
     y_train, y_test = y[train_index], y[test_index]
     clf.fit(X_train, y_train)
