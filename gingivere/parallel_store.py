@@ -5,7 +5,7 @@ import shelve_api as sapi
 from sklearn import preprocessing
 import pandas as pd
 import numpy as np
-from joblib import Parallel, delayed
+# from joblib import Parallel, delayed
 import time
 import sys
 import multiprocessing
@@ -26,12 +26,14 @@ def process_data(input):
 
 if __name__ == '__main__':
     patients = ["Dog_1", "Dog_2", "Dog_3", "Dog_4", "Dog_5", "Patient_1", "Patient_2"]
-    # d_keys = ['data_length_sec', 'sampling_frequency', 'sequence', 'state', 'file']
     num_cores = multiprocessing.cpu_count()
     now = time.time()
     if len(sys.argv) >= 2:
         patient = sys.argv[1]
-        res = Parallel(n_jobs=num_cores)(delayed(process_data)(i) for i in lrd.walk_files(patient))
+        # res = Parallel(n_jobs=num_cores)(delayed(process_data)(i) for i in lrd.walk_files(patient))
+        res = []
+        for i in lrd.walk_files(patient):
+            res.append(process_data(i))
         sapi.insert(res, "%s_mm" % patient)
     else:
         for patient in patients:
