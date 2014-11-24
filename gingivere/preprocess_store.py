@@ -21,7 +21,7 @@ def preprocess_data(input):
     X = []
     for row in data:
         for x in np.array_split(data[row], num_splits):
-            hist = np.histogram(x, density=True, range=r)
+            hist = np.histogram(x, density=False, range=r)
             X.append(hist[0])
     store['X'] = pd.DataFrame(X, dtype='float64')
     store.close()
