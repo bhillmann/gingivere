@@ -4,24 +4,13 @@ import pandas as pd
 
 from gingivere import SETTINGS
 
-def generate_names(target):
+def generate_mat_paths(target):
     folder = "%s/%s" % (SETTINGS.data_dir, target)
     for file in os.listdir(folder):
         if ".mat" in file:
-            yield folder, file
+            yield "%s/%s" % (folder, file)
 
-# Wrapper for generate names to fetch mat
-def tuple_to_mat(t):
-    folder, file = t
-    return load_mat("%s/%s" % (folder, file))
-
-# Wrapper for both
-def generate_mats(target):
-    for name in generate_names(target):
-        yield tuple_to_mat(name)
-
-
-def load_mat(path):
+def load_mat_from_path(path):
     mat = scipy.io.loadmat(path)
     values = mat[scipy.io.whosmat(path)[0][0]][0][0]
     keys = ['data', 'data_length_sec', 'sampling_frequency', 'channels', 'sequence']
