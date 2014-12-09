@@ -1,5 +1,7 @@
 from joblib import Memory
+import numpy as np
 from numbapro import autojit
+from sklearn import preprocessing
 
 from gingivere import SETTINGS
 from gingivere.data import load_mat_from_path
@@ -14,6 +16,18 @@ def source(path):
 def source_mem(path):
     return load_mat_from_path(path)['data'].values
 
-def windower(size=75):
+def preprocesses(origin):
+    return preprocessing.scale(origin)
+
+def window(origin, size=10):
+    destination = []
+    for i in origin:
+        destination.append(np.array_split(i, size))
+    return destination
+
+def quantize():
+    pass
+
+def flatten():
     pass
 
