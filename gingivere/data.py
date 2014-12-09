@@ -31,10 +31,3 @@ def load_mat(path):
     df = pd.DataFrame(data['data'], index=channels)
     data['data'] = df
     return data
-
-def main():
-    for data in generate_mats("Dog_2"):
-        print(data['data'].shape)
-
-if __name__ == "__main__":
-    main()

@@ -8,5 +8,5 @@ setup(
     license='MIT',
     author='Ben Hillmann',
     author_email='bhillmann@outlook.com',
-    description=''
+    description='', requires=['scipy', 'pandas']
 )
