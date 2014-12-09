@@ -1,5 +1,7 @@
 import shelve
+
 from gingivere import SETTINGS
+
 
 class Shelve(object):
     def __init__(self):
@@ -100,5 +102,4 @@ class InputSource:
 
     def get_pipeline(self):
         return self.pipeline
-
 
