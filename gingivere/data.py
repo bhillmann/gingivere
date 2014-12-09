@@ -1,8 +1,7 @@
 import scipy.io
-import json
 import re
-import os
 
+from settings import *
 
 def walk_files(patient, path="default"):
     if path == 'default':
@@ -50,9 +49,6 @@ def get_data_path():
         config = json.load(f)
         f.close()
     return config['data']
-
-
-DATA_PATH = get_data_path()
 
 def main():
     for data in walk_training_mats("Dog_2"):
