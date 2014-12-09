@@ -1,15 +1,15 @@
 import numpy as np
+import sklearn.utils
+from multiprocessing import Pool
 
-# helper methods for printing scores
-def get_score_summary(name, scores):
-    summary = 'mean=%.3f std=%.3f' % (np.mean(scores), np.std(scores))
-    score_list = ['%.3f' % score for score in scores]
-    return '%s [%s] %s' % (summary, ','.join(score_list), name)
+from gingivere.data import generate_mats
+from gingivere import SETTINGS
 
+def consume_mats(target, verbose=True):
+    pool = Pool(SETTINGS.N_jobs)
+    pool.map(consume_mat, [mat for mat in generate_mats(target)])
+    return
 
-def print_results(summaries):
-    summaries.sort(cmp=lambda x, y: cmp(x[1], y[1]))
-    if len(summaries) > 1:
-        print('summaries')
-        for s, mean in summaries:
-            print(s)
+def consume_mat(mat):
+    print(mat)
+
