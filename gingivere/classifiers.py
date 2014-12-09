@@ -1,7 +1,7 @@
 import numpy as np
 import sklearn
 import sklearn.pipeline
-from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
 
