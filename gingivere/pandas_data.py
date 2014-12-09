@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import pandas as pd
-import load_raw_data
 from collections import defaultdict
 
 print(__doc__)
