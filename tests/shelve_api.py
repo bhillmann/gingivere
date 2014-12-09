@@ -1,6 +1,6 @@
 import shelve
 
-def load(item):
+def load_shelve(item):
     try:
         s = shelve.open('./data/shelve')
         loaded = s[item]
@@ -8,7 +8,7 @@ def load(item):
         s.close()
     return loaded
 
-def insert(item, name):
+def insert_shelve(item, name):
     s = shelve.open('./data/shelve')
     try:
         s[name] = item
@@ -16,5 +16,8 @@ def insert(item, name):
         s.close()
     return item
 
-if __name__ == "__main__":
+def main():
     df = load('Dog_2')
+
+if __name__ == "__main__":
+    main()

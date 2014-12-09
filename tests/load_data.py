@@ -1,7 +1,4 @@
-import clf_creators
 # import mongo_select
-import shelve_api
-from pymongo import MongoClient
 
 # def shelve_data(patient, name):
 #     client = MongoClient()
@@ -9,6 +6,8 @@ from pymongo import MongoClient
 #     collection = db.posts
 #     data_dict = mongo_select.load_random_training_set(db, patient)
 #     shelve_api.insert(data_dict, name)
+from tests import shelve_api
+
 
 def load_shelve(name):
     return shelve_api.load(name)

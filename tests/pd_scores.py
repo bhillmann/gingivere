@@ -1,11 +1,13 @@
 from __future__ import print_function
 
-import raw_data_clf
-import mongo_select
-import shelve_api
+from collections import defaultdict
+
 import numpy as np
 
-from collections import defaultdict
+import raw_data_clf
+import mongo_select
+from tests import shelve_api
+
 
 print("Training the CLF")
 clf = raw_data_clf.RawClf('Dog_2')

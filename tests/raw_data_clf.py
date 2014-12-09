@@ -1,19 +1,15 @@
 from __future__ import print_function
 
-import shelve_api
-
 import numpy as np
-import pandas as pd
-
 from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
 from sklearn.cross_validation import StratifiedKFold
-from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 from sklearn.metrics import roc_auc_score
+
+from tests import shelve_api
 
 print(__doc__)
 

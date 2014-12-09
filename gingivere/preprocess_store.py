@@ -1,13 +1,14 @@
-import data as lrd
-import shelve_api as sapi
-from sklearn import preprocessing
-import pandas as pd
-import numpy as np
-from joblib import Parallel, delayed
 import time
 import sys
 import multiprocessing
 import os
+
+import pandas as pd
+import numpy as np
+from joblib import Parallel, delayed
+
+from tests import shelve_api as sapi
+
 
 print(__doc__)
 

@@ -1,15 +1,14 @@
+import random
+
 import pandas as pd
 from sklearn.cross_validation import StratifiedKFold
-from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
-import random
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
-import shelve_api
+from tests import shelve_api
+
 
 def yield_patient_names(name, d):
     for key in d:

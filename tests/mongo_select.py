@@ -1,9 +1,9 @@
-from pymongo import MongoClient
 import random
-import shelve_api
 import collections
 
+from pymongo import MongoClient
 from bson.objectid import ObjectId
+from tests import shelve_api
 
 
 INTERICTAL_QUERY = {'state':  'interictal'}

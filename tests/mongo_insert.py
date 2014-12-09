@@ -1,11 +1,12 @@
-from pymongo import MongoClient
-import shelve_api
-import load_raw_data
 import copy
-import json
-import shelve
-import pandas as pd
 import collections
+
+import pandas as pd
+
+from pymongo import MongoClient
+import load_raw_data
+from tests import shelve_api
+
 
 def insert_patient(patient):
     name_to_post_id = {}

@@ -1,15 +1,16 @@
 from __future__ import print_function
 
-import load_raw_data
 from collections import defaultdict
+import copy
 
 import pandas as pd
-import shelve_api
-
 import tornado.ioloop
 from tornado import gen
+
+import load_raw_data
 import motor
-import copy
+from tests import shelve_api
+
 
 def insert_patient(patient):
     count = 0

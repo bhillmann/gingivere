@@ -1,24 +1,19 @@
-import ipdb
-import pandas as pd
-import numpy as np
-
 import math
-
-from sklearn.isotonic import IsotonicRegression
-from sklearn.ensemble import AdaBoostRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Ridge
-from sklearn.metrics import classification_report
-from sklearn.cross_validation import StratifiedKFold
-from sklearn.metrics import roc_auc_score
-
-from joblib import Parallel, delayed
 import time
 import sys
 import multiprocessing
 import os
 
-import shelve_api as sapi
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import classification_report
+from sklearn.cross_validation import StratifiedKFold
+from sklearn.metrics import roc_auc_score
+from joblib import Parallel, delayed
+
+from tests import shelve_api as sapi
+
 
 print(__doc__)
 

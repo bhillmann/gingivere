@@ -1,14 +1,11 @@
-import pandas as pd
-import numpy as np
-from sklearn import preprocessing
 from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Ridge
 from sklearn.cross_validation import StratifiedKFold
 import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 
-import shelve_api
+from tests import shelve_api
+
 
 XX, yy = shelve_api.load('lr')
 X = XX[2700:]
