@@ -136,4 +136,5 @@ target/
 # Ignore JSON files
 *.json
 
-gingivere/data-cache
+data-cache
+submissions
