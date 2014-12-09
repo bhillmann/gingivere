@@ -4,8 +4,6 @@ from utilities import Shelve
 
 
 def main():
-    settings = load_settings()
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", help="the target patient")
 
@@ -23,6 +21,7 @@ def main():
             'Patient_1',
             'Patient_2'
         ]
+
 
 
 
