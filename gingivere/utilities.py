@@ -1,8 +1,8 @@
 import shelve
 
 class Shelve(object):
-    def __init__(self, data_cache):
-        self.data_cache = data_cache
+    def __init__(self, settings):
+        self.data_cache = settings.data_cache
 
     def load_shelve(self, item):
         try:
