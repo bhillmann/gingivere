@@ -7,5 +7,6 @@ from gingivere import SETTINGS
 def do_transformation_pipeline(target, transformations):
     pipeline = TransformationPipeline(transformations)
     pool = Pool(SETTINGS.N_jobs)
-    results = pool.map(pipeline.run, [path for path in generate_mat_paths(target)])
-    return results
+    paths = [path for path in generate_mat_paths(target)]
+    results = pool.map(pipeline.run, paths)
+    return results, paths

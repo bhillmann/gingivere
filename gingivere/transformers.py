@@ -1,6 +1,5 @@
 from joblib import Memory
 import numpy as np
-from numbapro import autojit
 from sklearn import preprocessing
 
 from gingivere import SETTINGS

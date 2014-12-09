@@ -1,15 +1,17 @@
-import numpy as np
-import sklearn.utils
-from multiprocessing import Pool
 
-from gingivere.data import generate_mats
-from gingivere import SETTINGS
+def build_feature_vectors():
+    features = []
+    targets = []
+    for i, path in enumerate(paths):
+        for row in features[i]:
+            features.append(row)
+        targets = len(features[i])
 
-def consume_mats(target, verbose=True):
-    pool = Pool(SETTINGS.N_jobs)
-    pool.map(consume_mat, [mat for mat in generate_mats(target)])
-    return
+def build_target_vector():
+    pass
 
-def consume_mat(mat):
-    print(mat)
-
+def load_data_for_cv(data):
+    features, paths = data
+    X = build_feature_vectors(features)
+    y = build_target_vector(features, path)
+    return X, y

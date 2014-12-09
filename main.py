@@ -30,8 +30,9 @@ def main():
         (quantize, {})
     ]
 
-    do_transformation_pipeline(targets[0], transformations)
+    d = do_transformation_pipeline(targets[0], transformations)
+    return d
 
 
 if __name__ == "__main__":
-    main()
+    data = main()
