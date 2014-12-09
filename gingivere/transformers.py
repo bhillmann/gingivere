@@ -16,13 +16,13 @@ def source(path):
 def source_mem(path):
     return load_mat_from_path(path)['data'].values
 
-def preprocesses(origin):
-    return preprocessing.scale(origin)
+def preprocess(origin):
+    return preprocessing.scale(origin.astype('float32'))
 
 def window(origin, size=10):
     destination = []
-    for i in origin:
-        destination.append(np.array_split(i, size))
+    for row in origin:
+        destination.append(np.array_split(row, size))
     return destination
 
 def quantize():
