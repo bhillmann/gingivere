@@ -46,7 +46,7 @@ def load_mat(path, file, state):
 
 
 def get_data_path():
-    with open('config.json', 'r') as f:
+    with open('SETTINGS.json', 'r') as f:
         config = json.load(f)
         f.close()
     return config['data']
