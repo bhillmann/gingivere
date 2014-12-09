@@ -1,6 +1,9 @@
 import argparse
 
-from utilities import Shelve
+from gingivere.utilities import FeaturePipeline, ConcatFeaturePipelines, InputSource
+from gingivere.classifiers import make_simple_lr
+
+from workers import *
 
 
 def main():
@@ -21,6 +24,14 @@ def main():
             'Patient_1',
             'Patient_2'
         ]
+
+    targets = ['Dog_1']
+
+    pipelines = [ConcatFeaturePipelines(FeaturePipeline(InputSource()))]
+    classifiers = [make_simple_lr()]
+
+    run_cross_validation(targets, classifiers, pipelines)
+
 
 
 

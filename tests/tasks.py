@@ -1,10 +1,13 @@
-import numpy as np
-import sklearn.utils
-from sklearn.metrics import roc_auc_score
 import gzip
 import os.path
 import hashlib
-from pipeline import FeatureConcatPipeline
+
+import numpy as np
+import sklearn.utils
+from sklearn.metrics import roc_auc_score
+
+from tests.pipeline import FeatureConcatPipeline
+
 
 
 # flatten data down to 2 dimensions for putting through a classifier
