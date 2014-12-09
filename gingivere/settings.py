@@ -6,7 +6,7 @@ import os
 Settings = namedtuple('Settings', ['data_dir', 'cache_dir', 'submission_dir', 'N_jobs'])
 
 
-def load_settings(path='SETTINGS.json'):
+def load_settings(path='../SETTINGS.json'):
     with open(path) as f:
         settings = json.load(f)
 

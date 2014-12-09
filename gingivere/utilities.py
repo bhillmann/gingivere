@@ -1,8 +1,9 @@
 import shelve
+from gingivere import SETTINGS
 
 class Shelve(object):
-    def __init__(self, settings):
-        self.data_cache = settings.data_dir
+    def __init__(self):
+        self.data_cache = SETTINGS.data_dir
 
     def load(self, item):
         try:

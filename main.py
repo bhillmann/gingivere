@@ -25,7 +25,6 @@ def main():
             'Patient_2'
         ]
 
-    print(targets)
 
 
 

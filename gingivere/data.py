@@ -1,7 +1,7 @@
 import scipy.io
 import re
 
-def walk_files(patient, path="default"):
+def walk_files(patient):
     if path == 'default':
         path = DATA_PATH + '/' + patient
     for file in os.listdir(path):
@@ -12,7 +12,7 @@ def walk_files(patient, path="default"):
         elif 'test' in file:
             yield (path, file, 'test')
 
-def walk_training_mats(target):
+def generate_mats(target):
     for data in walk_files(target):
         path, file, state = data
         yield load_mat(path, file, state)
