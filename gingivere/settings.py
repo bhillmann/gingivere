@@ -23,5 +23,3 @@ def load_settings():
             pass
 
     return Settings(data_dir=data_dir, cache_dir=cache_dir, submission_dir=submission_dir, N_jobs=N_jobs)
-
-load_settings()
