@@ -1,6 +1,5 @@
 import argparse
 
-from gingivere.settings import load_settings
 from utilities import Shelve
 
 

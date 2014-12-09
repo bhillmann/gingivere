@@ -14,4 +14,4 @@ class SimpleLogisticRegression(LinearRegression):
 
 
 def make_simple_lr():
-    return (sklearn.pipeline.make_pipeline(StandardScaler(), SimpleLogisticRegression()), 'ss-slr')
+    return sklearn.pipeline.make_pipeline(StandardScaler(), SimpleLogisticRegression()), 'ss-slr'
