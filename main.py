@@ -1,6 +1,7 @@
 import argparse
 
-from workers import *
+from workers import do_transformation_pipeline
+from transformers import source
 
 
 def main():
@@ -22,7 +23,11 @@ def main():
             'Patient_2'
         ]
 
-    generate_target_data(targets[0])
+    transformations = [
+        (source, {})
+    ]
+
+    do_transformation_pipeline(targets[0], transformations)
 
 
 if __name__ == "__main__":

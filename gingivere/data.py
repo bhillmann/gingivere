@@ -31,3 +31,13 @@ def load_mat_from_path(path):
     df = pd.DataFrame(data['data'], index=channels)
     data['data'] = df
     return data
+
+def generate_mat_cvs(target):
+    for path in generate_mat_paths(target):
+        if 'test' not in path:
+            yield path
+
+def generate_mat_tests(target):
+    for path in generate_mat_paths(target):
+        if 'test' in path:
+            yield path
