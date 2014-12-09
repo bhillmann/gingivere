@@ -22,7 +22,7 @@ def main():
             'Patient_2'
         ]
 
-    generate_target_data(target[0])
+    generate_target_data(targets[0])
 
 
 if __name__ == "__main__":

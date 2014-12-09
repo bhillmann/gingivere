@@ -18,7 +18,6 @@ def tuple_to_mat(t):
 # Wrapper for both
 def generate_mats(target):
     for name in generate_names(target):
-        print(name)
         yield tuple_to_mat(name)
 
 
