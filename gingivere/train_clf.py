@@ -2,6 +2,10 @@ import ipdb
 import pandas as pd
 import numpy as np
 
+import math
+
+from sklearn.isotonic import IsotonicRegression
+from sklearn.ensemble import AdaBoostRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from sklearn.metrics import classification_report
@@ -50,16 +54,45 @@ def sort_data(data):
 
 def train_clf(X, y, verbose=True):
     clf = LinearRegression()
-    clf.fit(X, y)
+    XX = X[80000:]
+    yy = y[80000:]
     if verbose:
-        # skf = StratifiedKFold(y, n_folds=2)
+        skf = StratifiedKFold(yy, n_folds=2)
+        for train_index, test_index in skf:
+            print("Detailed classification report:")
+            print()
+            print("The model is trained on the full development set.")
+            print("The scores are computed on the full evaluation set.")
+            print()
+            X_train, X_test = XX[train_index], XX[test_index]
+            y_train, y_test = yy[train_index], yy[test_index]
+            clf.fit(X_train, y_train)
+            y, y_pred = y, clf.predict(X)
+            # for i, num in enumerate(y_pred):
+            #     if num < 0.0:
+            #         y_pred[i] = 0.0
+            #         continue
+            #     elif num > 1.0:
+            #         y_pred[i] = 1.0
+            #         continue
+            y_pred = y_pred - y_pred.mean()
+            y_pred = y_pred/y_pred.std()
+            y_pred = [1/(1+math.pow(math.e, -.5*p)) for p in y_pred]
+            print(classification_report(np.around(y), np.around(y_pred)))
+            print()
+            print(roc_auc_score(y, y_pred))
+            print()
         # for train_index, test_index in skf:
-        print("Detailed classification report:")
-        print()
-        y_true, y_pred = y, clf.predict(X)
-        print()
-        print(roc_auc_score(y_true, y_pred))
-        print()
+        #     print("Detailed classification report:")
+        #     print()
+        #
+        #     y_true, y_pred = y, clf.predict(X)
+        #     print(roc_auc_score(y_true, y_pred))
+            # y_pred = y_pred - y_pred.mean()
+            # y_pred = y_pred/y_pred.std()
+            # y_pred = [1/(1+math.pow(math.e, -.5*p)) for p in y_pred]
+        #     print(roc_auc_score(y_true, y_pred))
+        #     print()
     clf.fit(X, y)
     return clf
 

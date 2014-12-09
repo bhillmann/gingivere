@@ -5,7 +5,7 @@ import shelve_api as sapi
 from sklearn import preprocessing
 import pandas as pd
 import numpy as np
-# from joblib import Parallel, delayed
+from joblib import Parallel, delayed
 import time
 import sys
 import multiprocessing
@@ -17,8 +17,8 @@ def process_data(input):
     name = data['file'].split('.')[0]
     print(name)
     store = pd.HDFStore("D:/gingivere/data/%s.h5" % name)
-    pp = preprocessing.scale(data['data'])
-    df = pd.DataFrame(pp, index=data['channels'])
+    # pp = preprocessing.scale(data['data'])
+    df = pd.DataFrame(data['data'], index=data['channels'])
     del data
     store['data'] = df
     store.close()
