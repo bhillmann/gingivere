@@ -22,11 +22,16 @@ def preprocess(origin):
 def window(origin, size=10):
     destination = []
     for row in origin:
-        destination.append(np.array_split(row, size))
+        for i in np.array_split(row, size):
+            destination.append(i)
     return destination
 
-def quantize():
-    pass
+def quantize(origin):
+    destination = []
+    for row in origin:
+        hist, bin_edges = np.histogram(row, density=True)
+        destination.append(hist)
+    return np.asarray(destination, dtype='float32')
 
 def flatten():
     pass

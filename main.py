@@ -1,7 +1,7 @@
 import argparse
 
 from workers import do_transformation_pipeline
-from transformers import source, preprocess
+from transformers import source, preprocess, window, quantize
 
 
 def main():
@@ -25,7 +25,9 @@ def main():
 
     transformations = [
         (source, {}),
-        (preprocess, {})
+        (preprocess, {}),
+        (window, {}),
+        (quantize, {})
     ]
 
     do_transformation_pipeline(targets[0], transformations)
