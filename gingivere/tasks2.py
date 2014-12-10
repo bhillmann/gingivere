@@ -20,7 +20,7 @@ def make_cv_scores_pipeline():
 
 def make_target_cv_scores_pipeline(target, feature_pipeline, preprocess_pipeline, process_pipeline, post_process_pipeline):
     t = Timer
-    current = preprocess_data(target, preprocess_pipeline)
+    current = preprocess_data(target, feature_pipeline, preprocess_pipeline)
     current = process_data(current, process_pipeline)
     current = postprocess_data(current, post_process_pipeline)
     make_cv_scores(current)

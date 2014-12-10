@@ -1,6 +1,6 @@
 import argparse
 
-from gingivere.features import Scale, Window, Quantize
+from gingivere.features import Scale, Window, Quantize, MeanStd
 from gingivere.pipeline import Pipeline
 from gingivere.preprocess import preprocess_data
 
@@ -24,7 +24,7 @@ def main():
             'Patient_2'
         ]
 
-    feature_pipeline = [Pipeline((Scale, Window, Quantize))]
+    feature_pipeline = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd))]
     preprocess_pipeline = [Pipeline(())]
 
     preprocess_data('Dog_1', feature_pipeline, preprocess_pipeline)

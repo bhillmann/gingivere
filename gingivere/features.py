@@ -48,3 +48,11 @@ class Quantize(FeaturePipe):
             hist, bin_edges = np.histogram(row, density=True)
             destination.append(hist)
         return np.asarray(destination, dtype='float32')
+
+class MeanStd(FeaturePipe):
+    @staticmethod
+    def apply(origin):
+        destination = []
+        for row in origin:
+            destination.append(np.array([row.mean(), row.std()]))
+        return np.asarray(destination)
