@@ -12,7 +12,7 @@ def mask_for_mat(df, path):
     return df[df['paths'] == path]
 
 def mask_for_state(df, state='preictal'):
-    return [state in i for i in df['paths']]
+    return df[[state in i for i in df['paths']]]
 
 def mask_for_random_sample(df, n='auto'):
     if n == 'auto':
@@ -26,3 +26,10 @@ def wrap_df_to_data(df):
     y = y.as_matrix()
     paths = list(df['paths'])
     return X, y, paths
+
+def train_strategy(data):
+    df = build_df(data)
+    df_1 = mask_for_random_sample(df)
+    df_2 = mask_for_state(df)
+    df = pd.concat([df_1, df_2])
+    return wrap_df_to_data(df)
