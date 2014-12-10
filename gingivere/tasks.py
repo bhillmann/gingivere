@@ -3,11 +3,11 @@ import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.cross_validation import StratifiedKFold
-from data import generate_mat_cvs
-from gingivere import SETTINGS
 
+from gingivere import SETTINGS
+from gingivere.data import generate_mat_cvs
 from gingivere.classifiers import make_simple_lr
-from utilities import TransformationPipeline
+from gingivere.utilities import TransformationPipeline
 
 
 def build_data_for_cv(data):
@@ -23,10 +23,10 @@ def build_data_for_cv(data):
         elif 'preictal' in path:
             y = y + [1] * num_feature_vecs
     y = np.array(y, dtype='float32')
-    return X, y
+    return X, y, paths
 
 def train_classifier(data):
-    X, y = data
+    X, y, paths = data
     clf, name = make_simple_lr()
     skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:

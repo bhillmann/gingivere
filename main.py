@@ -2,7 +2,7 @@ import argparse
 
 from gingivere.transformers import source, preprocess, window, quantize
 from gingivere.tasks import build_data_for_cv, train_classifier
-from tasks import do_transformation_pipeline
+from gingivere.tasks import do_transformation_pipeline
 
 
 def main():
