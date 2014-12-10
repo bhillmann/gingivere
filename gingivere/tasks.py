@@ -1,5 +1,6 @@
 from multiprocessing.pool import Pool
 import numpy as np
+import pandas as pd
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.cross_validation import StratifiedKFold
@@ -8,6 +9,7 @@ from gingivere import SETTINGS
 from gingivere.data import generate_mat_cvs
 from gingivere.classifiers import make_simple_lr
 from gingivere.utilities import TransformationPipeline
+from gingivere.trainer import build_df, mask_for_state, wrap_df_to_data, mask_for_random_sample
 
 
 def build_data_for_cv(data):
@@ -30,6 +32,13 @@ def build_data_for_cv(data):
             p = p + [path] * num_feature_vecs
     y = np.array(y, dtype='float32')
     return X, y, p
+
+def train_strategy(data):
+    df = build_df(data)
+    df_1 = mask_for_random_sample(df)
+    df_2 = mask_for_state(df)
+    df = pd.concat([df_1, df_2])
+    return wrap_df_to_data(df)
 
 def train_classifier(data):
     X, y, paths = data

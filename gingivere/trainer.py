@@ -11,11 +11,18 @@ def build_df(data):
 def mask_for_mat(df, path):
     return df[df['paths'] == path]
 
-def mask_for_state(df, state='interictal'):
-    return df[['interictal' in i for i in df['paths']]]
+def mask_for_state(df, state='preictal'):
+    return [state in i for i in df['paths']]
 
-def random_sample(df, n='auto'):
+def mask_for_random_sample(df, n='auto'):
     if n == 'auto':
         n = int(sum(df['y']))
     # print(n)
     return df.ix[random.sample(list(df.index), n)]
+
+def wrap_df_to_data(df):
+    X = df.iloc[:, :-2].values
+    y = df['y']
+    y = y.as_matrix()
+    paths = list(df['paths'])
+    return X, y, paths
