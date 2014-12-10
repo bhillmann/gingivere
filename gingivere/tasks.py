@@ -18,10 +18,10 @@ def build_data_for_cv(data):
         elif 'preictal' in path:
             y = y + [1] * num_feature_vecs
     y = np.array(y, dtype='float32')
-    return X, y
+    return X, y, paths
 
 def train_classifier(data):
-    X, y = data
+    X, y, paths = data
     clf, name = make_simple_lr()
     skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:
@@ -46,3 +46,16 @@ def train_classifier(data):
         print(roc_auc_score(y_true, y_pred))
         print()
     return clf
+
+
+class TransformationPipeline:
+    def __init__(self, transformations):
+        self.transformations = transformations
+
+    def run(self, origin):
+        destination = origin
+        for transform, kargs in self.transformations:
+            destination = transform(destination, **kargs)
+        return destination
+
+# (funct,kargs={})
