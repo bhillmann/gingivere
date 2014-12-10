@@ -17,13 +17,19 @@ def build_data_for_cv(data):
     len_feature_vec = X.shape[-1]
     X = X.reshape(-1, len_feature_vec)
     y = []
+    p = []
     for path in paths:
         if 'interictal' in path:
             y = y + [0] * num_feature_vecs
+            p = p + [path] * num_feature_vecs
         elif 'preictal' in path:
             y = y + [1] * num_feature_vecs
+            p = p + [path] * num_feature_vecs
+        else:
+            y = y + [-1] * num_feature_vecs
+            p = p + [path] * num_feature_vecs
     y = np.array(y, dtype='float32')
-    return X, y, paths
+    return X, y, p
 
 def train_classifier(data):
     X, y, paths = data
