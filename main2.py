@@ -25,9 +25,8 @@ def main():
         ]
 
     feature_pipeline = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd))]
-    preprocess_pipeline = [Pipeline(())]
 
-    preprocess_data('Dog_1', feature_pipeline, preprocess_pipeline)
+    preprocess_data('Dog_1', feature_pipeline)
 
 
 if __name__ == "__main__":

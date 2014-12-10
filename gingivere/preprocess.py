@@ -6,7 +6,7 @@ from gingivere import SETTINGS
 from gingivere.data import generate_mat_cvs
 from gingivere.features import FeaturePipeline
 
-def preprocess_data(target, feature_pipeline, preprocess_pipeline, submission=False):
+def preprocess_data(target, feature_pipeline, submission=False):
     pool = Pool(SETTINGS.N_jobs)
     paths = [path for path in generate_mat_cvs(target)]
     if submission:
@@ -47,10 +47,10 @@ def wrap_preprocess_to_data(gar, paths):
 def mask_for_state(paths, state='preictal'):
     return [i for i in paths if state in i]
 
-def mask_for_random_sample(paths, n='auto'):
+def mask_for_random_sample(paths, n=False):
     preictals = mask_for_state(paths)
     interictals = mask_for_state(paths, state='interictal')
-    if n == 'auto':
+    if n:
         n = len(interictals)
     preictals = random.sample(preictals, n)
     return preictals + interictals
