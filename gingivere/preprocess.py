@@ -1,41 +1,22 @@
 from multiprocessing import Pool
-import pandas as pd
 import numpy as np
 import random
 
 from gingivere import SETTINGS
 from gingivere.data import generate_mat_cvs
 from gingivere.features import FeaturePipeline
-from gingivere.pipeline import Pipeline
 
-def preprocess_data(target, feature_pipeline, preprocess_pipeline):
+def preprocess_data(target, feature_pipeline, preprocess_pipeline, submission=False):
     pool = Pool(SETTINGS.N_jobs)
     paths = [path for path in generate_mat_cvs(target)]
+    if submission:
+        paths = mask_for_state(paths, state='test')
+    else:
+        paths = mask_for_random_sample(paths)
     feature_pipeline = FeaturePipeline(feature_pipeline)
     results = pool.map(feature_pipeline.run, paths)
     gar = generate_accumulate_results(results)
     return wrap_preprocess_to_data(gar, paths)
-
-class PreprocessPipeline:
-    def __init__(self, pipelines):
-        self.pipelines = pipelines
-        for pipeline in pipelines:
-            assert isinstance(pipeline, Pipeline)
-
-    def run(self, path):
-        data = source(path)
-        features = []
-        for pipeline in self.pipelines:
-            features.append(pipeline.run(data))
-        return X, y, p
-
-class PreprocessPipe(object):
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def apply(origin):
-        raise NotImplementedError
 
 def generate_accumulate_results(results):
     for result in results:
@@ -63,36 +44,13 @@ def wrap_preprocess_to_data(gar, paths):
     y = np.array(y, dtype='float64')
     return X, y, p
 
+def mask_for_state(paths, state='preictal'):
+    return [i for i in paths if state in i]
 
-def build_df(data):
-    X, y, paths = data
-    df = pd.DataFrame(X)
-    df['y'] = y
-    df['paths'] = paths
-    return df
-
-def mask_for_mat(df, path):
-    return df[df['paths'] == path]
-
-def mask_for_state(df, state='preictal'):
-    return df[[state in i for i in df['paths']]]
-
-def mask_for_random_sample(df, n='auto'):
+def mask_for_random_sample(paths, n='auto'):
+    preictals = mask_for_state(paths)
+    interictals = mask_for_state(paths, state='interictal')
     if n == 'auto':
-        n = int(sum(df['y']))
-    # print(n)
-    return df.ix[random.sample(list(df.index), n)]
-
-def wrap_df_to_data(df):
-    X = df.iloc[:, :-2].values
-    y = df['y']
-    y = y.as_matrix()
-    paths = list(df['paths'])
-    return X, y, paths
-
-def train_strategy(data):
-    df = build_df(data)
-    df_1 = mask_for_random_sample(df)
-    df_2 = mask_for_state(df)
-    df = pd.concat([df_1, df_2])
-    return wrap_df_to_data(df)
+        n = len(interictals)
+    preictals = random.sample(preictals, n)
+    return preictals + interictals
