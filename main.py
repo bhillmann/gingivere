@@ -1,8 +1,8 @@
 import argparse
 
-from workers import do_transformation_pipeline
+from gingivere.workers import do_transformation_pipeline
 from gingivere.transformers import source, preprocess, window, quantize
-from gingivere.tasks import build_data_for_cv
+from gingivere.tasks import build_data_for_cv, train_classifier
 
 
 def main():
@@ -33,6 +33,7 @@ def main():
 
     d = do_transformation_pipeline(targets[0], transformations)
     d = build_data_for_cv(d)
+    train_classifier(d)
     return d
 
 

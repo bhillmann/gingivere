@@ -1,9 +1,14 @@
 import numpy as np
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_auc_score
+from sklearn.cross_validation import StratifiedKFold
+
+from gingivere.classifiers import make_simple_lr
 
 def build_data_for_cv(data):
     X, paths = data
     X = np.array(X)
-    num_feature_vecs = X.shape[-2]
+    num_feature_vecs = X.shape[1]
     len_feature_vec = X.shape[-1]
     X = X.reshape(-1, len_feature_vec)
     y = []
@@ -15,11 +20,29 @@ def build_data_for_cv(data):
     y = np.array(y, dtype='float32')
     return X, y
 
-def build_target_vector():
-    pass
-
-def load_data_for_cv(data):
-    features, paths = data
-    X = build_feature_vectors(features)
-    y = build_target_vector(features, path)
-    return X, y
+def train_classifier(data):
+    X, y = data
+    clf, name = make_simple_lr()
+    skf = StratifiedKFold(y, n_folds=2)
+    for train_index, test_index in skf:
+        print("Detailed classification report:")
+        print()
+        print("The model is trained on the full development set.")
+        print("The scores are computed on the full evaluation set.")
+        print()
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        clf.fit(X_train, y_train)
+        y_true, y_pred = y_test, clf.predict(X_test)
+        for i, num in enumerate(y_pred):
+            if num < 0.0:
+                y_pred[i] = 0.0
+                continue
+            elif num > 1.0:
+                y_pred[i] = 1.0
+                continue
+        print(classification_report(np.around(y_true), np.around(y_pred)))
+        print()
+        print(roc_auc_score(y_true, y_pred))
+        print()
+    return clf
