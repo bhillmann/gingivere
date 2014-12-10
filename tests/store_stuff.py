@@ -14,8 +14,8 @@ for name in df.file:
     data_df = data_df.astype('float64')
     data_df = data_df.T
     corr = data_df.corr()
-    vs = data_df.apply(lambda x: x.var())
-    ds = data_df.apply(lambda x: LA.norm(x))
+    vs = data_df.apply
+    ds = data_df.apply
     f_val, p_val = stats.f_oneway(*data_df.T.values)
 
 

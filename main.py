@@ -31,12 +31,19 @@ def main():
         (quantize, {})
     ]
 
+    transformations2 = [
+        (source, {}),
+        (preprocess, {}),
+        (window, {}),
+        (quantize, {})
+    ]
+
     d = do_transformation_pipeline(targets[0], transformations)
     d = build_data_for_cv(d)
     clf = train_clf(d)
     scores_for_clf(d, clf)
-    return d
+    return d, clf
 
 
 if __name__ == "__main__":
-    data = main()
+    data, clf = main()

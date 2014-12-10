@@ -1,11 +1,11 @@
-from joblib import Memory
+# from joblib import Memory
 import numpy as np
 from sklearn import preprocessing
 
 from gingivere import SETTINGS
 from gingivere.data import load_mat_from_path
 
-memory = Memory(SETTINGS.cache_dir, mmap_mode='r+')
+# memory = Memory(SETTINGS.cache_dir, mmap_mode='r+')
 
 def source(path):
     # print("Loading: %s" % path)

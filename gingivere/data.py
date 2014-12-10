@@ -32,6 +32,9 @@ def load_mat_from_path(path):
     data['data'] = df
     return data
 
+def source(path):
+    return load_mat_from_path(path)['data'].values
+
 def generate_mat_cvs(target):
     for path in generate_mat_paths(target):
         if 'test' not in path:
