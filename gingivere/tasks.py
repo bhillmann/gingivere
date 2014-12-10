@@ -1,9 +1,14 @@
+from multiprocessing.pool import Pool
 import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.cross_validation import StratifiedKFold
+from data import generate_mat_cvs
+from gingivere import SETTINGS
 
 from gingivere.classifiers import make_simple_lr
+from utilities import TransformationPipeline
+
 
 def build_data_for_cv(data):
     X, paths = data
@@ -46,3 +51,11 @@ def train_classifier(data):
         print(roc_auc_score(y_true, y_pred))
         print()
     return clf
+
+
+def do_transformation_pipeline(target, transformations):
+    pipeline = TransformationPipeline(transformations)
+    pool = Pool(SETTINGS.N_jobs)
+    paths = [path for path in generate_mat_cvs(target)]
+    results = pool.map(pipeline.run, paths)
+    return results, paths
