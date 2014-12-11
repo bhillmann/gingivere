@@ -24,7 +24,8 @@ def main():
             'Patient_2'
         ]
 
-    feature_plumbing = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd)), Pipeline((Window, FFT))]
+    # feature_plumbing = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd)), Pipeline((Window, FFT))]
+    feature_plumbing = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd))]
 
     make_target_cv_scores_pipeline('Dog_1', feature_plumbing)
 
