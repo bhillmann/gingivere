@@ -6,12 +6,8 @@ import os
 Settings = namedtuple('Settings', ['data_dir', 'cache_dir', 'submission_dir', 'N_jobs'])
 
 
-def load_settings(path="../SETTINGS.json"):
-    try:
-        f = open(path)
-    except:
-        f = open('SETTINGS.json')
-
+def load_settings(path="C:/Users/Benjamin/Projects/gingivere/SETTINGS.json"):
+    f = open(path)
     settings = json.load(f)
 
     data_dir = str(settings['competition-data-dir'])
