@@ -4,7 +4,7 @@ import random
 
 from gingivere import SETTINGS
 from gingivere.data import generate_mat_cvs
-from gingivere.features import FeaturePipeline
+from gingivere.features import FeaturePlumbing
 
 def preprocess_data(target, feature_pipeline, submission=False):
     pool = Pool(SETTINGS.N_jobs)
@@ -13,8 +13,8 @@ def preprocess_data(target, feature_pipeline, submission=False):
         paths = mask_for_state(paths, state='test')
     else:
         paths = mask_for_random_sample(paths)
-    feature_pipeline = FeaturePipeline(feature_pipeline)
-    results = pool.map(feature_pipeline.run, paths)
+    feature_plumbing = FeaturePlumbing(feature_pipeline)
+    results = pool.map(feature_plumbing.run, paths)
     gar = generate_accumulate_results(results)
     return wrap_preprocess_to_data(gar, paths)
 
@@ -50,7 +50,7 @@ def mask_for_state(paths, state='preictal'):
 def mask_for_random_sample(paths, n=False):
     preictals = mask_for_state(paths)
     interictals = mask_for_state(paths, state='interictal')
-    if n:
-        n = len(interictals)
-    preictals = random.sample(preictals, n)
+    if not n:
+        n = len(preictals)
+    interictals = random.sample(interictals, n)
     return preictals + interictals

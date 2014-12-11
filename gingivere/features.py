@@ -1,10 +1,11 @@
 import numpy as np
 from sklearn import preprocessing
+from scipy.fftpack import rfft
 
 from gingivere.pipeline import Pipeline
 from gingivere.data import source
 
-class FeaturePipeline:
+class FeaturePlumbing:
     def __init__(self, pipelines):
         self.pipelines = pipelines
         for pipeline in pipelines:
@@ -56,3 +57,12 @@ class MeanStd(FeaturePipe):
         for row in origin:
             destination.append(np.array([row.mean(), row.std()]))
         return np.asarray(destination)
+
+class FFT(FeaturePipe):
+    """
+    Apply Fast Fourier Transform to the last axis.
+    """
+    @staticmethod
+    def apply(origin):
+        destination = [rfft(row) for row in origin]
+        return destination

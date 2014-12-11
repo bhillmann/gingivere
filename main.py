@@ -1,8 +1,8 @@
 import argparse
 
-from gingivere.transformers import source, preprocess, window, quantize
-from gingivere.tasks import build_data_for_cv, do_transformation_pipeline, train_clf
-from gingivere.utilities import scores_for_clf
+from gingivere.features import Scale, Window, Quantize, MeanStd, FFT
+from gingivere.pipeline import Pipeline
+from gingivere.tasks import make_target_cv_scores_pipeline
 
 
 def main():
@@ -24,26 +24,10 @@ def main():
             'Patient_2'
         ]
 
-    transformations = [
-        (source, {}),
-        (preprocess, {}),
-        (window, {}),
-        (quantize, {})
-    ]
+    feature_plumbing = [Pipeline((Scale, Window, Quantize)), Pipeline((Window, MeanStd)), Pipeline((Window, FFT))]
 
-    transformations2 = [
-        (source, {}),
-        (preprocess, {}),
-        (window, {}),
-        (quantize, {})
-    ]
-
-    d = do_transformation_pipeline(targets[0], transformations)
-    d = build_data_for_cv(d)
-    clf = train_clf(d)
-    scores_for_clf(d, clf)
-    return d, clf
+    make_target_cv_scores_pipeline('Dog_1', feature_plumbing)
 
 
 if __name__ == "__main__":
-    data, clf = main()
+    main()

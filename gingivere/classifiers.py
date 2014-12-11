@@ -13,5 +13,7 @@ class SimpleLogisticRegression(LinearRegression):
         return np.vstack((1.0 - predictions, predictions)).T
 
 
+
+
 def make_simple_lr():
     return sklearn.pipeline.make_pipeline(StandardScaler(), SimpleLogisticRegression()), 'ss-slr'
