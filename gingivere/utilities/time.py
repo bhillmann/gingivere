@@ -26,10 +26,10 @@ class Timer:
         return get_millis() - self.start
 
     def elapsed_seconds(self):
-        return long(self.elapsed_millis() / 1000.0)
+        return int(self.elapsed_millis() / 1000.0)
 
     def pretty_str(self):
         ms = self.elapsed_millis()
         if ms > 5000:
-            return '%ds' % long(ms / 1000.0)
+            return '%ds' % int(ms / 1000.0)
         return '%dms' % ms

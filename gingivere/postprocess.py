@@ -2,17 +2,16 @@ import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 
-def postprocess_data(processed, submission=False):
-    X, y, paths, clfs = processed
-    scores_for_clf(X, y, paths, clfs)
+def postprocess_data(X, y, paths, trainers, submission=False):
+    scores_for_clf(X, y, trainers)
 
 def generate_mask_for_mats(paths):
     for unique_path in set(paths):
         yield [unique_path == path for path in paths]
 
 
-def scores_for_clf(X, y, paths, clfs):
-    for train_index, test_index, clf in clfs:
+def scores_for_clf(X, y, trainers):
+    for train_index, test_index, clf in trainers:
         print("Detailed classification report:")
         print()
         print("The model is trained on a folded development set.")
