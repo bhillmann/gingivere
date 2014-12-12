@@ -9,6 +9,7 @@ from gingivere.features import FeaturePlumbing
 def preprocess_data(target, feature_pipeline, submission=False):
     pool = Pool(SETTINGS.N_jobs)
     paths = [path for path in generate_mat_cvs(target)]
+    print(len(paths))
     if submission:
         paths = mask_for_state(paths, state='test')
     else:

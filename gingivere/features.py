@@ -123,5 +123,5 @@ class PIBIntegrateLog(PIB):
                 power = simps(bin_arr, freq_arr)
                 dest_row.append(np.log(power))
             destination.append(dest_row)
-        print("Completed PIBIntegrateLog in %s" % t.pretty_str())
+        # print("Completed PIBIntegrateLog in %s" % t.pretty_str())
         return np.asarray(destination, dtype='float64')

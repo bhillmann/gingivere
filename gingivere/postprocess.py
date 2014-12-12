@@ -5,14 +5,17 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import StratifiedKFold
 
 def postprocess_data(X, y, paths, trainers, target, submission=False):
-    # scores_for_clf(X, y, trainers)
-    XX, yy = [], []
-    for pred, target in accumulate_scores(X, y, trainers, paths):
-        XX += list(X)
-        yy += list(y)
-    scores_for_clf_2(np.array(XX), np.array(yy))
+    scores_for_clf(X, y, trainers)
+    # XX, yy = [], []
+    # for pred, target in accumulate_scores(X, y, trainers, paths):
+    #     XX += list(pred)
+    #     yy += list(target)
+    # scores_for_clf_2(np.array(XX), np.array(yy))
+    # for pred, target in accumulate_scores(X, y, trainers, paths):
+    #     scores_for_clf_3(pred, target)
 
 def generate_mask_for_mats(paths):
+    print(len(set(paths)))
     for unique_path in set(paths):
         yield np.array([unique_path == path for path in paths], dtype='bool')
 
@@ -61,3 +64,12 @@ def scores_for_clf_2(X, y):
         print()
         print(roc_auc_score(y_true, y_pred[:, 1]))
         print()
+
+def scores_for_clf_3(X, y):
+    y_pred = np.array([np.mean(x) for x in X])
+    print("Detailed classification report:")
+    print()
+    print(classification_report(np.around(y), np.around(y_pred)))
+    print()
+    print(roc_auc_score(y, y_pred))
+    print()
