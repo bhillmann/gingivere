@@ -115,7 +115,6 @@ class PIBIntegrateLog(PIB):
 
     def apply(self, origin):
         t = Timer()
-        print("Completed FFT in %s" % t.pretty_str())
         origin = self.ready_data_for_apply(origin)
         destination = []
         for row in origin:
@@ -124,4 +123,5 @@ class PIBIntegrateLog(PIB):
                 power = simps(bin_arr, freq_arr)
                 dest_row.append(np.log(power))
             destination.append(dest_row)
+        print("Completed PIBIntegrateLog in %s" % t.pretty_str())
         return np.asarray(destination, dtype='float64')
