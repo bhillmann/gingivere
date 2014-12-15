@@ -17,20 +17,14 @@ def process_data(target, X, y, paths, submission=False, clf=False):
         pass
     else:
         clf, name = make_clf()
-        trainers = []
-        cv = StratifiedKFold(y, n_folds=5)
-        for train_index, test_index in cv:
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-            clf.fit(X_train, y_train)
-            trainers.append((train_index, test_index, clf))
-        clf = save_best_classifier(target, X, y, trainers)
-    return X, y, paths, clf
+        score, clf, train_index, test_index = save_best_classifier(target, name, X, y, clf)
+    return X, y, paths, clf, train_index, test_index
 
-def save_best_classifier(target, X, y, trainers, verbose=True):
-    print("Saving the best classifier for: %s" % target)
+def save_best_classifier(target, name, X, y, trainers, clf, verbose=True):
+    print("Saving the best classifier for: %s_%s" % (target, name))
     best = float('inf'), False
-    for train_index, test_index, clf in trainers:
+    cv = StratifiedKFold(y, n_folds=5)
+    for train_index, test_index in cv:
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
         y_true, y_pred = y_test, clf.predict_proba(X_test)
@@ -46,6 +40,6 @@ def save_best_classifier(target, X, y, trainers, verbose=True):
             print(curr_score)
             print()
         if curr_score < best[0]:
-            best = curr_score, clf
-    insert_shelve(clf, '%s_clf' % target)
-    return clf
+            best = curr_score, clf, train_index, test_index
+    insert_shelve(clf, '%s_%s' % (target, name))
+    return best
