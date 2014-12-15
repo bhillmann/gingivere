@@ -1,17 +1,19 @@
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.cross_validation import StratifiedKFold
 
-def postprocess_data(target, X, y, paths, trainers, submission=False):
-    XX, yy = [], []
-    for pred, target in accumulate_scores(paths):
-        XX += list(pred)
-        yy += list(target)
-    scores_for_clf_2(np.array(XX), np.array(yy))
-    for pred, target in accumulate_scores(X, y, trainers, paths):
-        scores_for_clf_3(pred, target)
+from gingivere.utilities.shelve import load_shelve
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import classification_report
+
+def postprocess_data(target, X, y, paths, train=False, submission=False):
+    loaded = load_shelve('%s_clf' % target)
+    score, clf, train = loaded
+    XX, yy = accumulate_scores(X, y, clf, paths)
+    scores_for_post(XX, yy)
+
 
 def generate_mask_for_mats(paths):
-    print(len(set(paths)))
     for unique_path in set(paths):
         yield np.array([unique_path == path for path in paths], dtype='bool')
 
@@ -21,9 +23,9 @@ def accumulate_scores(X, y, clf, paths):
     for mask in generate_mask_for_mats(paths):
         pred.append(clf.predict_proba(X[mask])[:, 1])
         target.append(y[mask][0])
-    yield np.array(pred), np.array(target)
+    return np.array(pred), np.array(target)
 
-def accumulate_scores_for_clf(X, y):
+def scores_for_post(X, y):
     clf = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=1, random_state=0)
     skf = StratifiedKFold(y, n_folds=2)
     for train_index, test_index in skf:

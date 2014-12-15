@@ -4,7 +4,7 @@ from sklearn.cross_validation import StratifiedKFold
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import classification_report
 
-from gingivere.utilities.shelve import insert_shelve
+from gingivere.utilities.shelve import insert_shelve, load_shelve
 
 def process_data(target, X, y, paths, submission=False, clf=False):
     #TODO customize classifier
@@ -16,17 +16,21 @@ def process_data(target, X, y, paths, submission=False, clf=False):
     if submission:
         pass
     else:
-        clf, name = make_clf()
-        score, clf, train_index, test_index = save_best_classifier(target, name, X, y, clf)
-    return X, y, paths, clf, train_index, test_index
+        score, clf, train = save_best_classifier(target, X, y, make_clf)
+    return X, y, paths, clf, train
 
-def save_best_classifier(target, name, X, y, trainers, clf, verbose=True):
-    print("Saving the best classifier for: %s_%s" % (target, name))
-    best = float('inf'), False
+def save_best_classifier(target, X, y, make_clf, verbose=False):
+    try:
+        best = load_shelve('%s_clf' % target)
+    except:
+        best = (float('-inf'), False, (False, False))
+    new = False
     cv = StratifiedKFold(y, n_folds=5)
     for train_index, test_index in cv:
+        clf, name = make_clf()
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
+        clf.fit(X_train, y_train)
         y_true, y_pred = y_test, clf.predict_proba(X_test)
         curr_score = roc_auc_score(y_true, y_pred[:, 1])
         if verbose:
@@ -39,7 +43,12 @@ def save_best_classifier(target, name, X, y, trainers, clf, verbose=True):
             print()
             print(curr_score)
             print()
-        if curr_score < best[0]:
-            best = curr_score, clf, train_index, test_index
-    insert_shelve(clf, '%s_%s' % (target, name))
+        if curr_score > best[0]:
+            new = True
+            best = curr_score, clf, (train_index, test_index)
+    if new:
+        print("Saving the best classifier in %s as %s_clf with a score of %.2f" % (name, target, best[0]))
+        insert_shelve(best, '%s_clf' % target)
+    else:
+        print("Loaded the best classifier in %s as %s_clf with a score of %.2f" % (name, target, best[0]))
     return best
