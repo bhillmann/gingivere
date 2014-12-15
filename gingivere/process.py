@@ -1,7 +1,10 @@
 from classifiers import make_simple_lr
 from sklearn.cross_validation import StratifiedKFold
+from sklearn.metrics import roc_auc_score
 
-def process_data(X, y, paths, submission=False, clf=False):
+from gingivere.utilities.shelve import insert_shelve
+
+def process_data(target, X, y, paths, submission=False, clf=False):
     #TODO customize classifier
     if clf:
         pass
@@ -19,5 +22,18 @@ def process_data(X, y, paths, submission=False, clf=False):
             y_train, y_test = y[train_index], y[test_index]
             clf.fit(X_train, y_train)
             trainers.append((train_index, test_index, clf))
-    return X, y, paths, trainers
+        clf = save_best_classifier(target, X, y, trainers)
+    return X, y, paths, clf
 
+def save_best_classifier(target, X, y, trainers):
+    print("Saving the best classifier for: %s" % target)
+    best = float('inf'), False
+    for train_index, test_index, clf in trainers:
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        y_true, y_pred = y_test, clf.predict_proba(X_test)
+        curr_score = roc_auc_score(y_true, y_pred[:, 1])
+        if curr_score < best[0]:
+            best = curr_score, clf
+    insert_shelve(clf, '%s_clf' % target)
+    return clf

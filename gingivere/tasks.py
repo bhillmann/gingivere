@@ -19,8 +19,8 @@ def make_cv_scores_pipeline():
 def make_target_cv_scores_pipeline(target, feature_pipeline):
     t = Timer()
     X, y, paths = preprocess_data(target, feature_pipeline)
-    X, y, paths, trainers = process_data(X, y, paths)
-    current = postprocess_data(X, y, paths, trainers, target)
+    X, y, paths, trainers = process_data(target, X, y, paths)
+    current = postprocess_data(target, X, y, paths, trainers)
     make_cv_scores(current)
     print("Completed %s in %s" % (target, t.pretty_str()))
 

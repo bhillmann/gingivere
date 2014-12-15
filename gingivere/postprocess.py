@@ -1,18 +1,16 @@
 import numpy as np
 from sklearn.metrics import classification_report
-from sklearn.metrics import roc_auc_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import StratifiedKFold
 
-def postprocess_data(X, y, paths, trainers, target, submission=False):
-    scores_for_clf(X, y, trainers)
-    # XX, yy = [], []
-    # for pred, target in accumulate_scores(X, y, trainers, paths):
-    #     XX += list(pred)
-    #     yy += list(target)
-    # scores_for_clf_2(np.array(XX), np.array(yy))
-    # for pred, target in accumulate_scores(X, y, trainers, paths):
-    #     scores_for_clf_3(pred, target)
+def postprocess_data(target, X, y, paths, trainers, submission=False):
+    XX, yy = [], []
+    for pred, target in accumulate_scores(X, y, trainers, paths):
+        XX += list(pred)
+        yy += list(target)
+    scores_for_clf_2(np.array(XX), np.array(yy))
+    for pred, target in accumulate_scores(X, y, trainers, paths):
+        scores_for_clf_3(pred, target)
 
 def generate_mask_for_mats(paths):
     print(len(set(paths)))
